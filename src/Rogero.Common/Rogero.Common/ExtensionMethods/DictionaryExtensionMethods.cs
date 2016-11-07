@@ -6,7 +6,17 @@ namespace Rogero.Common.ExtensionMethods
 {
     public static class DictionaryExtensionMethods
     {
-        public static Dictionary<K, IList<V>> ToDictionaryMany<T, K, V>(this IList<T> list, Func<T, K> keyFunc,
+        public static Dictionary<K, IList<T>> ToDictionaryMany<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc)
+        {
+            var dict = new Dictionary<K, IList<T>>();
+            foreach (var item in list)
+            {
+                dict.AddToDictionary(keyFunc(item), item);
+            }
+            return dict;
+        }
+
+        public static Dictionary<K, IList<V>> ToDictionaryMany<T, K, V>(this IEnumerable<T> list, Func<T, K> keyFunc,
             Func<T, V> valueFunc)
         {
             var dict = new Dictionary<K, IList<V>>();
@@ -17,7 +27,7 @@ namespace Rogero.Common.ExtensionMethods
             return dict;
         }
 
-        public static SortedDictionary<K, IList<V>> ToSortedDictionaryMany<T, K, V>(this IList<T> list,
+        public static SortedDictionary<K, IList<V>> ToSortedDictionaryMany<T, K, V>(this IEnumerable<T> list,
             Func<T, K> keyFunc,
             Func<T, V> valueFunc)
         {
@@ -29,7 +39,7 @@ namespace Rogero.Common.ExtensionMethods
             return dict;
         }
 
-        public static SortedDictionary<K, IList<T>> ToSortedDictionaryMany<T, K>(this IList<T> list,
+        public static SortedDictionary<K, IList<T>> ToSortedDictionaryMany<T, K>(this IEnumerable<T> list,
             Func<T, K> keyFunc)
         {
             var dict = new SortedDictionary<K, IList<T>>();

@@ -44,8 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="ExtensionMethods\DictionaryExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\EnumerableExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ListExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ObservableCollectionExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

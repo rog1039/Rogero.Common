@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rogero.Common
+namespace Rogero.Common.ExtensionMethods
 {
-    public class Class1
+    public static class EnumerableExtensionMethods
     {
+
     }
 }
