@@ -47,7 +47,9 @@
     <Compile Include="ExtensionMethods\DictionaryExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumerableExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ListExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\NullableExtensions.cs" />
     <Compile Include="ExtensionMethods\ObservableCollectionExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
