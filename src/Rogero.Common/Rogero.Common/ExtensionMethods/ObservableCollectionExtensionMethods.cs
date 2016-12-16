@@ -5,10 +5,10 @@ namespace Rogero.Common.ExtensionMethods
 {
     public static class ObservableCollectionExtensionMethods
     {
-        public static void ReplaceObservableCollectionItems<T>(this IEnumerable<T> list, ObservableCollection<T> oc)
+        public static void ReplaceObservableCollectionItems<T>(this IEnumerable<T> items, ObservableCollection<T> oc)
         {
             oc.Clear();
-            foreach (var item in list)
+            foreach (var item in items)
             {
                 oc.Add(item);
             }
