@@ -21,13 +21,25 @@ namespace Rogero.Common
 
         public static bool Search(PropertyInfo[] properties, object obj, string searchText)
         {
-            return Matches(properties, obj, searchText, 0);
+            if(string.IsNullOrWhiteSpace(searchText)) return true;
+            
+            var terms = searchText.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var term in terms)
+            {
+                var match = Matches(properties, obj, term, 0);
+                if (!match) return false;
+            }
+            return true;
         }
 
         protected static bool Matches<T>(PropertyInfo[] properties, T item, string searchText, int depth = 0)
         {
             if (string.IsNullOrWhiteSpace(searchText)) return true;
             if (depth > 3) return false;
+
+            var performingNegationSearch = searchText[0] == '-';
+            searchText = performingNegationSearch ? searchText.RemoveLeft(1) : searchText;
+            var returnTransform = performingNegationSearch ? (Func<bool, bool>)InvertBoolTransform : DoNothingBoolTransform;
 
             foreach (var propertyInfo in properties)
             {
@@ -36,25 +48,25 @@ namespace Rogero.Common
                 {
                     var value = (string)propertyInfo.GetValue(item);
                     var result = value != null && value.InsensitiveContains(searchText);
-                    if (result) return true;
+                    if (result) return returnTransform(true);
                 }
                 if (type == typeof(int))
                 {
                     var value = ((int)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
-                    if (result) return true;
+                    if (result) return returnTransform(true);
                 }
                 if (type == typeof(decimal))
                 {
                     var value = ((decimal)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
-                    if (result) return true;
+                    if (result) return returnTransform(true);
                 }
                 if (type == typeof(double))
                 {
                     var value = ((double)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
-                    if (result) return true;
+                    if (result) return returnTransform(true);
                 }
                 //if (!IsSimple(type))
                 //{
@@ -66,7 +78,10 @@ namespace Rogero.Common
                 //    }
                 //}
             }
-            return false;
+            return returnTransform(false);
         }
+
+        private static bool DoNothingBoolTransform(bool b) => b;
+        private static bool InvertBoolTransform(bool b) => !b;
     }
 }

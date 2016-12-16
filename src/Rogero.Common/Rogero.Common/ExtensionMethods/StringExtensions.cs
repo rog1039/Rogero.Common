@@ -41,10 +41,12 @@ namespace Rogero.Common.ExtensionMethods
 
             return s1.Length == s2.Length && s1.IndexOf(s2, StringComparison.InvariantCultureIgnoreCase) == 0;
         }
+
         public static bool InsensitiveContains(this string input, string part)
         {
             if (part == null || input == null) return false;
-            return CultureInfo.InvariantCulture.CompareInfo.IndexOf(input, part, CompareOptions.IgnoreCase) >= 0;
+            return input.IndexOf(part, StringComparison.OrdinalIgnoreCase) >= 0;
+            //return CultureInfo.InvariantCulture.CompareInfo.IndexOf(input, part, CompareOptions.IgnoreCase) >= 0;
         }
 
         public static string RemoveAllWhitespace(this string s)
@@ -55,6 +57,12 @@ namespace Rogero.Common.ExtensionMethods
             result = result.Replace("\t", "");
             
             return result;
+        }
+
+        public static string RemoveLeft(this string s, int numberOfCharacters)
+        {
+            if(numberOfCharacters > s.Length) throw new ArgumentException("Number of characters to remove cannot be larger than length of string");
+            return s.Substring(numberOfCharacters, s.Length - numberOfCharacters);
         }
     }
 }
