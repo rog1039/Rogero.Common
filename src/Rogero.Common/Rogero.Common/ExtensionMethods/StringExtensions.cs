@@ -43,6 +43,7 @@ namespace Rogero.Common.ExtensionMethods
         }
         public static bool InsensitiveContains(this string input, string part)
         {
+            if (part == null || input == null) return false;
             return CultureInfo.InvariantCulture.CompareInfo.IndexOf(input, part, CompareOptions.IgnoreCase) >= 0;
         }
 
