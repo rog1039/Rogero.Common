@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -64,5 +65,27 @@ namespace Rogero.Common.ExtensionMethods
             if(numberOfCharacters > s.Length) throw new ArgumentException("Number of characters to remove cannot be larger than length of string");
             return s.Substring(numberOfCharacters, s.Length - numberOfCharacters);
         }
+
+        public static void ToConsoleWriteLine(this string s)
+        {
+            Console.WriteLine(s);
+        }
+
+        public static void ToDebugWriteLine(this string s)
+        {
+            Debug.WriteLine(s);
+        }
+
+        public static bool IsNullOrWhitespace(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
+
+        public static bool IsNotNullOrWhitespace(this string s)
+        {
+            return !string.IsNullOrWhiteSpace(s);
+        }
+
+        
     }
 }

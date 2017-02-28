@@ -1,4 +1,8 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace Rogero.Common.ExtensionMethods
 {
@@ -24,5 +28,48 @@ namespace Rogero.Common.ExtensionMethods
         {
             return new List<T>() { item };
         }
+
+        public static IList<T> GetFirstOfGroup<T, TGroup, TSort>(this IEnumerable<T> list, Func<T, TGroup> groupByFunc, Func<T,TSort> sortByFunc, SortOrder order)
+        {
+            var groups = list.GroupBy(groupByFunc);
+            
+            switch (order)
+            {
+                case SortOrder.Unspecified:
+                    return groups.Select(g => g.First()).ToList();
+                case SortOrder.Ascending:
+                    return groups.Select(g => g.OrderBy(sortByFunc)).First().ToList();
+                case SortOrder.Descending:
+                    return groups.Select(g => g.OrderByDescending(sortByFunc).First()).ToList();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(order), order, null);
+            }
+        }
+
+        public static bool IsEmpty<T>(this ICollection list)
+        {
+            return list.Count == 0;
+        }
+
+        public static bool IsEmpty<T>(this IReadOnlyCollection<T> list)
+        {
+            return list.Count == 0;
+        }
+
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> list, Action<T> action)
+        {
+            foreach (var item in list)
+            {
+                action(item);
+                yield return item;
+            }
+        }
+    }
+
+    public enum SortOrder
+    {
+        Unspecified = -1,
+        Ascending = 0,
+        Descending = 1,
     }
 }

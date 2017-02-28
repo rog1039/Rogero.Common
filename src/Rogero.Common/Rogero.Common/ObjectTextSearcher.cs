@@ -19,7 +19,7 @@ namespace Rogero.Common
             }
         }
 
-        public static bool Search(PropertyInfo[] properties, object obj, string searchText)
+        private static bool Search(PropertyInfo[] properties, object obj, string searchText)
         {
             if(string.IsNullOrWhiteSpace(searchText)) return true;
             
@@ -32,7 +32,7 @@ namespace Rogero.Common
             return true;
         }
 
-        protected static bool Matches<T>(PropertyInfo[] properties, T item, string searchText, int depth = 0)
+        private static bool Matches<T>(PropertyInfo[] properties, T item, string searchText, int depth = 0)
         {
             if (string.IsNullOrWhiteSpace(searchText)) return true;
             if (depth > 3) return false;
@@ -68,15 +68,12 @@ namespace Rogero.Common
                     var result = value.ToString().InsensitiveContains(searchText);
                     if (result) return returnTransform(true);
                 }
-                //if (!IsSimple(type))
-                //{
-                //    var obj = propertyInfo.GetValue(item);
-                //    if (obj != null)
-                //    {
-                //        var result = Matches(obj, searchText, depth + 1);
-                //        if (result) return true;
-                //    }
-                //}
+                if (type == typeof(DateTime))
+                {
+                    var value = ((DateTime)propertyInfo.GetValue(item));
+                    var result = value.ToString("d").InsensitiveContains(searchText);
+                    if (result) return returnTransform(true);
+                }
             }
             return returnTransform(false);
         }
