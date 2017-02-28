@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rogero.Option, Version=1.0.27.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\Woeber.WarehouseAnalysis\src\Woeber.WarehouseAnalysis\packages\Rogero.Option.1.0.27\lib\portable45-net45+win8+wpa81\Rogero.Option.dll</HintPath>
+    <Reference Include="Rogero.Option, Version=1.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Woeber.Logistics\src\Woeber.Logistics\packages\Rogero.Option.1.0.28\lib\portable45-net45+win8+wpa81\Rogero.Option.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
