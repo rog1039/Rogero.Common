@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Rogero.Common.Selections
 {
-    internal static class ListSelectionChanger
+    public static class ListSelectionChanger
     {
         private const int StartingIndex = 0;
 
