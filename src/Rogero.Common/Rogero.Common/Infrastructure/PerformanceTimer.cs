@@ -1,6 +1,6 @@
 using System;
 
-namespace Woeber.Logistics.App.Infrastructure
+namespace Rogero.Common.Infrastructure
 {
     public static class PerformanceTimer
     {
@@ -13,7 +13,7 @@ namespace Woeber.Logistics.App.Infrastructure
         {
             public DateTime StartTime { get; set; }
             public DateTime LastCheckpointTime { get; set; }
-
+            
             private readonly Action<string> _loggerAction = Console.WriteLine;
 
             public PerformanceTimerManager()

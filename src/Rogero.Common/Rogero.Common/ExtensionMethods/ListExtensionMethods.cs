@@ -15,6 +15,14 @@ namespace Rogero.Common.ExtensionMethods
                 list.Add(newItem);
             }
         }
+        
+        public static void AddRange<T>(this IList<T> list, params T[] newItems)
+        {
+            foreach (var newItem in newItems)
+            {
+                list.Add(newItem);
+            }
+        }
 
         public static void AddTo<T>(this IEnumerable<T> objects, IList<T> list)
         {

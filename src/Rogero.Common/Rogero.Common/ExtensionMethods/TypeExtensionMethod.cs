@@ -23,4 +23,9 @@ namespace Rogero.Common.ExtensionMethods
             var f1 = typeof(TypeExtensionMethod).ImplementsInterface<ICloneable>();
         }
     }
+
+    public static class TaskExtensionMethods
+    {
+        public static Task<T> ToTask<T>(this T obj) => Task.FromResult(obj);
+    }
 }

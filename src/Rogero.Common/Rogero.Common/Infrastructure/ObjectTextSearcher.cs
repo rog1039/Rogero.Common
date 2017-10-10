@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -32,7 +33,7 @@ namespace Rogero.Common
             return true;
         }
 
-        private static bool Matches<T>(PropertyInfo[] properties, T item, string searchText, int depth = 0)
+        private static bool Matches(PropertyInfo[] properties, object item, string searchText, int depth = 0)
         {
             if (string.IsNullOrWhiteSpace(searchText)) return true;
             if (depth > 3) return false;
@@ -50,29 +51,46 @@ namespace Rogero.Common
                     var result = value != null && value.InsensitiveContains(searchText);
                     if (result) return returnTransform(true);
                 }
-                if (type == typeof(int))
+                else if (type == typeof(int))
                 {
                     var value = ((int)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
                     if (result) return returnTransform(true);
                 }
-                if (type == typeof(decimal))
+                else if (type == typeof(decimal))
                 {
                     var value = ((decimal)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
                     if (result) return returnTransform(true);
                 }
-                if (type == typeof(double))
+                else if (type == typeof(double))
                 {
                     var value = ((double)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
                     if (result) return returnTransform(true);
                 }
-                if (type == typeof(DateTime))
+                else if (type == typeof(DateTime))
                 {
-                    var value = ((DateTime)propertyInfo.GetValue(item));
+                    var value = ((DateTime) propertyInfo.GetValue(item));
                     var result = value.ToString("d").InsensitiveContains(searchText);
                     if (result) return returnTransform(true);
+                }
+                else if (type.ImplementsInterface<IEnumerable>())
+                {
+                    var value = (IEnumerable) propertyInfo.GetValue((item));
+                    foreach (var child in value)
+                    {
+                        throw new NotImplementedException("This code is broken - needs fixing");
+                        var child_res = Matches(child.GetType().GetProperties(), child, searchText, depth + 1);
+                        if (child_res) returnTransform(true);
+                    }
+                }
+                else
+                {
+                    var val = propertyInfo.GetValue(item);
+                    var props = type.GetProperties();
+                    var result = Matches(props, val, searchText, depth + 1);
+                    if(result) return returnTransform(true);
                 }
             }
             return returnTransform(false);

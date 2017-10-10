@@ -28,15 +28,27 @@ namespace Rogero.Common.Selections
                 .Subscribe(SearchTextChanged);
         }
 
+        public void AddNewItem(T item)
+        {
+            Items.Add(item);
+            ItemSource.Add(item);
+        }
+
         protected virtual void SearchTextChanged(string searchText)
         {
             var selected = SelectedItem.Value;
-            
-            var matchingItems = ObjectTextSearcher.Search(ItemSource, searchText);
-            matchingItems.ReplaceObservableCollectionItems(Items);
 
+            var matchingItems = GetSearchResults(searchText);
+
+            matchingItems.ReplaceObservableCollectionItems(ItemSource);
             var newSelected = Items.FirstOrDefault(z => z.Equals(selected));
             SelectedItem.Value = newSelected;
+        }
+
+        protected virtual IEnumerable<T> GetSearchResults(string searchText)
+        {
+            var matchingItems = ObjectTextSearcher.Search(Items, searchText);
+            return matchingItems;
         }
 
         public override void ReplaceItemSource(IList<T> records)
