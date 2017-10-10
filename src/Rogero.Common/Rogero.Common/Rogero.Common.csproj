@@ -34,7 +34,8 @@
       <HintPath>..\packages\Rogero.Option.1.0.29\lib\portable45-net45+win8+wpa81\Rogero.Option.dll</HintPath>
     </Reference>
     <Reference Include="Rogero.ReactiveProperty, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\Woeber.Logistics\src\Woeber.Logistics\packages\Rogero.ReactiveProperty.1.0.11\lib\portable45-net45+win8+wpa81\Rogero.ReactiveProperty.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rogero.ReactiveProperty.1.0.11\lib\portable45-net45+win8+wpa81\Rogero.ReactiveProperty.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
