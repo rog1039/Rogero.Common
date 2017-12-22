@@ -35,6 +35,7 @@ namespace Rogero.Common
 
         private static bool Matches(PropertyInfo[] properties, object item, string searchText, int depth = 0)
         {
+            if (item == null) return false;
             if (string.IsNullOrWhiteSpace(searchText)) return true;
             if (depth > 3) return false;
 

@@ -40,4 +40,29 @@ namespace Rogero.Common.Selections
         {
             selector.SelectedItem.Value = selector.Items.LastOrDefault();}
     }
+
+    public class GenericMultiSelector<T>
+    {
+        public ObservableCollection<T> SelectedItems { get; } = new ObservableCollection<T>();
+        public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
+
+        public virtual void ReplaceItemSource(IList<T> records)
+        {
+            try
+            {
+                var selectedItems = SelectedItems.ToList();
+                Items.Clear();
+                Items.AddRange(records);
+                foreach (var selectedItem in selectedItems)
+                {
+                    var newItem = Items.First(z => selectedItem.Equals(z));
+                    SelectedItems.Add(newItem);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+    }
 }
