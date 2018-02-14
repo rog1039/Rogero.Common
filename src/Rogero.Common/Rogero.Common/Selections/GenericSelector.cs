@@ -27,6 +27,11 @@ namespace Rogero.Common.Selections
                 Console.WriteLine(e);
             }
         }
+
+        public virtual void ClearItems()
+        {
+            Items.Clear();
+        }
     }
 
     public static class GenericSelectorExtensions

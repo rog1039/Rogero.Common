@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
@@ -26,6 +27,13 @@ namespace Rogero.Common.Selections
                 .Throttle(_searchThrottleDelay)
                 .ObserveOnDispatcher()
                 .Subscribe(SearchTextChanged);
+
+            //Listen for changes on the Items collection and update ItemsSource as needed.
+            var ItemsChangedObservable =
+                Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                    eh => Items.CollectionChanged += eh,
+                    eh => Items.CollectionChanged -= eh);
+            ItemsChangedObservable.Subscribe(z => SearchTextChanged(SearchText.Value));
         }
 
         public void AddNewItem(T item)
@@ -54,6 +62,12 @@ namespace Rogero.Common.Selections
         public override void ReplaceItemSource(IList<T> records)
         {
             records.ReplaceObservableCollectionItems(Items);
+            SearchTextChanged(SearchText.Value);
+        }
+
+        public override void ClearItems()
+        {
+            base.ClearItems();
             SearchTextChanged(SearchText.Value);
         }
     }

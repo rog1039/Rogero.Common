@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +21,7 @@ namespace Rogero.Common
             }
         }
 
-        private static bool Search(PropertyInfo[] properties, object obj, string searchText)
+        public static bool Search(PropertyInfo[] properties, object obj, string searchText)
         {
             if(string.IsNullOrWhiteSpace(searchText)) return true;
             
@@ -78,10 +79,10 @@ namespace Rogero.Common
                 }
                 else if (type.ImplementsInterface<IEnumerable>())
                 {
+                    continue;
                     var value = (IEnumerable) propertyInfo.GetValue((item));
                     foreach (var child in value)
                     {
-                        throw new NotImplementedException("This code is broken - needs fixing");
                         var child_res = Matches(child.GetType().GetProperties(), child, searchText, depth + 1);
                         if (child_res) returnTransform(true);
                     }
