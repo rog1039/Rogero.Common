@@ -16,7 +16,7 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
         
-        public static void AddRange<T>(this IList<T> list, params T[] newItems)
+        public static void AddRangeParams<T>(this IList<T> list, params T[] newItems)
         {
             foreach (var newItem in newItems)
             {
