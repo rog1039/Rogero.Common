@@ -12,7 +12,7 @@ namespace Rogero.Common.Selections
         public ReactiveProperty<T> SelectedItem { get; } = new ReactiveProperty<T>(default(T));
         public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
 
-        public virtual void ReplaceItemSource(IList<T> records)
+        public virtual void ReplaceItemSource(IEnumerable<T> records)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Rogero.Common.Selections
         public ObservableCollection<T> SelectedItems { get; } = new ObservableCollection<T>();
         public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
 
-        public virtual void ReplaceItemSource(IList<T> records)
+        public virtual void ReplaceItemSource(IEnumerable<T> records)
         {
             try
             {

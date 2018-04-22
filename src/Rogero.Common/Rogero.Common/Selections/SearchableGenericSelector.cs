@@ -59,7 +59,7 @@ namespace Rogero.Common.Selections
             return matchingItems;
         }
 
-        public override void ReplaceItemSource(IList<T> records)
+        public override void ReplaceItemSource(IEnumerable<T> records)
         {
             records.ReplaceObservableCollectionItems(Items);
             SearchTextChanged(SearchText.Value);

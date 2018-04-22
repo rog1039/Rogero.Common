@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Rogero.Common.ExtensionMethods
 {
     public static class EnumerableExtensionMethods
     {
+        [DebuggerStepThrough]
         public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
         {
             foreach (var item in list)
@@ -17,6 +19,7 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
 
+        [DebuggerStepThrough]
         public static void ForEach<T>(this IEnumerable<T> list, Action<int, T> action)
         {
             int index = 0;
