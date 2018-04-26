@@ -86,6 +86,14 @@ namespace Rogero.Common.ExtensionMethods
             return !string.IsNullOrWhiteSpace(s);
         }
 
-        
+        public static string Left(this string s, int count)
+        {
+            return s.Substring(0, count);
+        }
+
+        public static string Right(this string s, int count)
+        {
+            return s.Substring(s.Length - count, count);
+        }
     }
 }
