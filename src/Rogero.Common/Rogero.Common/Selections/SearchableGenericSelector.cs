@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Windows.Threading;
 using Rogero.Common.ExtensionMethods;
 using Rogero.ReactiveProperty;
 
@@ -13,6 +14,9 @@ namespace Rogero.Common.Selections
     public class SearchableGenericSelector<T> : GenericSelector<T>
     {
         public ReactiveProperty<string> SearchText { get; } = new ReactiveProperty<string>();
+        /// <summary>
+        /// The ObservableCollection containing the items after the search is performed.
+        /// </summary>
         public ObservableCollection<T> ItemSource { get; } = new ObservableCollection<T>();
 
         private readonly TimeSpan _searchThrottleDelay;
@@ -33,7 +37,7 @@ namespace Rogero.Common.Selections
                 Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                     eh => Items.CollectionChanged += eh,
                     eh => Items.CollectionChanged -= eh);
-            ItemsChangedObservable.Subscribe(z => SearchTextChanged(SearchText.Value));
+            ItemsChangedObservable.ObserveOnDispatcher().Subscribe(z => SearchTextChanged(SearchText.Value));
         }
 
         public void AddNewItem(T item)
