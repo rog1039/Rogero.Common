@@ -55,6 +55,5 @@ namespace Rogero.Common.ExtensionMethods
         }
 
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable) => new HashSet<T>(enumerable);
-        
     }
 }

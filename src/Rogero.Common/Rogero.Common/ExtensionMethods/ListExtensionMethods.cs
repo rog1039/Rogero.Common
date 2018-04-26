@@ -72,6 +72,16 @@ namespace Rogero.Common.ExtensionMethods
                 yield return item;
             }
         }
+        
+        public static void Remove<T>(this IList<T> list, T itemToRemove, IEqualityComparer<T> comparer)
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                var item = list[i];
+                var shouldRemove = comparer.Equals(item, itemToRemove);
+                if (shouldRemove) list.RemoveAt(i);
+            }
+        }
     }
 
     public enum SortOrder
