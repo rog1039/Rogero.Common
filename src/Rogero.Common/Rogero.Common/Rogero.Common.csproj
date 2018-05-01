@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="ExtensionMethods\DictionaryExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumerableExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\ISetExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ListExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\NullableExtensions.cs" />
     <Compile Include="ExtensionMethods\ObjectExtensions.cs" />
