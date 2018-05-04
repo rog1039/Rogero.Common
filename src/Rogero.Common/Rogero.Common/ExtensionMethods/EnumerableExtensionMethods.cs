@@ -10,24 +10,24 @@ namespace Rogero.Common.ExtensionMethods
 {
     public static class EnumerableExtensionMethods
     {
-        [DebuggerStepThrough]
-        public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
-        {
-            foreach (var item in list)
-            {
-                action(item);
-            }
-        }
-
-        [DebuggerStepThrough]
-        public static void ForEach<T>(this IEnumerable<T> list, Action<int, T> action)
-        {
-            int index = 0;
-            foreach (var item in list)
-            {
-                action(index++, item);
-            }
-        }
+//        [DebuggerStepThrough]
+//        public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
+//        {
+//            foreach (var item in list)
+//            {
+//                action(item);
+//            }
+//        }
+//
+//        [DebuggerStepThrough]
+//        public static void ForEach<T>(this IEnumerable<T> list, Action<int, T> action)
+//        {
+//            int index = 0;
+//            foreach (var item in list)
+//            {
+//                action(index++, item);
+//            }
+//        }
 
         public static IEnumerable<T> WhereCastTo<T>(this IEnumerable list)
         {
