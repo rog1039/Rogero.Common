@@ -88,12 +88,14 @@ namespace Rogero.Common.ExtensionMethods
 
         public static string Left(this string s, int count)
         {
-            return s.Substring(0, count);
+            var charCount = Math.Min(s.Length, count);
+            return s.Substring(0, charCount);
         }
 
         public static string Right(this string s, int count)
         {
-            return s.Substring(s.Length - count, count);
+            var charCount = Math.Min(s.Length, count);
+            return s.Substring(s.Length - charCount, charCount);
         }
     }
 }
