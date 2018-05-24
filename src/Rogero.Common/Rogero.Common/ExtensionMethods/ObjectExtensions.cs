@@ -19,6 +19,12 @@ namespace Rogero.Common.ExtensionMethods
             }
             return Option<T>.None;
         }
+        
+//        public static bool IsPrimitive(this Type type)
+//        {
+//            if (type == typeof(String)) return true;
+//            return (type.IsValueType & type.IsPrimitive);
+//        }
 
         //public static T Combine<T>(params object[] objects)
         //{
