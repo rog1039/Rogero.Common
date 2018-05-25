@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,19 @@ namespace Rogero.Common.ExtensionMethods
                 if (other != null) return other;
             }
             return Option<T>.None;
+        }
+
+        /// <summary>
+        /// Returns true if the type is a reference type that is not a string.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsReference(this Type type)
+        {
+            if (type == typeof(string)) return false;
+            if (type.IsPrimitive) return false;
+
+            return true;
         }
         
 //        public static bool IsPrimitive(this Type type)
