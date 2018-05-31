@@ -2,7 +2,7 @@
 
 namespace Rogero.Common.ExtensionMethods
 {
-    public static class ISetExtensionMethods
+    public static class SetExtensionMethods
     {
         public static void AddRange<T>(this ISet<T> set, IEnumerable<T> objects)
         {
