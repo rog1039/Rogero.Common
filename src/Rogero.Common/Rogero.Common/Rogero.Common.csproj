@@ -60,6 +60,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionMethods\RegexExtensions.cs" />
     <Compile Include="ExtensionMethods\DictionaryExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumerableExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ISetExtensionMethods.cs" />
