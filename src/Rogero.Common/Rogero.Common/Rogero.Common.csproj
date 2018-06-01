@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rogero.Option, Version=1.0.31.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rogero.Option.1.0.31\lib\portable45-net45+win8+wpa81\Rogero.Option.dll</HintPath>
+    <Reference Include="Rogero.Option, Version=1.0.33.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rogero.Option.1.0.33\lib\portable45-net45+win8+wpa81\Rogero.Option.dll</HintPath>
     </Reference>
     <Reference Include="Rogero.ReactiveProperty, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rogero.ReactiveProperty.1.0.17\lib\portable45-net45+win8+wpa81\Rogero.ReactiveProperty.dll</HintPath>
