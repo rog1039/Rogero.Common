@@ -37,7 +37,11 @@ namespace Rogero.Common.Selections
                 Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                     eh => Items.CollectionChanged += eh,
                     eh => Items.CollectionChanged -= eh);
-            ItemsChangedObservable.ObserveOnDispatcher().Subscribe(z => SearchTextChanged(SearchText.Value));
+
+            ItemsChangedObservable
+                .Throttle(TimeSpan.FromMilliseconds(200))
+                .ObserveOnDispatcher()
+                .Subscribe(z => SearchTextChanged(SearchText.Value));
         }
 
         public void AddNewItem(T item)
