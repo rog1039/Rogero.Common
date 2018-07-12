@@ -17,22 +17,22 @@ namespace Rogero.Common.Tests
         {
             var objects = new ObjectToSearch(){Name = "A B", Quantity = 125}.MakeList();
             objects.Add(new ObjectToSearch() {Name = "A"});
-            var results = ObjectTextSearcher.Search(objects, "A");
+            var results = ObjectTextSearcher.FindMatches(objects, "A");
             results.Should().HaveCount(2);
 
-            var results2 = ObjectTextSearcher.Search(objects, "C");
+            var results2 = ObjectTextSearcher.FindMatches(objects, "C");
             results2.Should().HaveCount(0);
 
-            var results3 = ObjectTextSearcher.Search(objects, "25");
+            var results3 = ObjectTextSearcher.FindMatches(objects, "25");
             results3.Should().HaveCount(1);
 
-            var results4 = ObjectTextSearcher.Search(objects, "B");
+            var results4 = ObjectTextSearcher.FindMatches(objects, "B");
             results4.Should().HaveCount(1);
 
-            var results5 = ObjectTextSearcher.Search(objects, "A -B");
+            var results5 = ObjectTextSearcher.FindMatches(objects, "A -B");
             results5.Should().HaveCount(1);
 
-            var results6 = ObjectTextSearcher.Search(objects, "a -ab");
+            var results6 = ObjectTextSearcher.FindMatches(objects, "a -ab");
             results6.Should().HaveCount(2);
         }
 
@@ -51,13 +51,13 @@ namespace Rogero.Common.Tests
             var list = new List<NestedObject>{obj, obj2};
 
 
-            var result = ObjectTextSearcher.Search(list, "a");
+            var result = ObjectTextSearcher.FindMatches(list, "a");
             result.Should().HaveCount(1);
 
-            var result2 = ObjectTextSearcher.Search(list, "b");
+            var result2 = ObjectTextSearcher.FindMatches(list, "b");
             result2.Should().HaveCount(2);
 
-            var result3 = ObjectTextSearcher.Search(list, "d");
+            var result3 = ObjectTextSearcher.FindMatches(list, "d");
             result3.Should().HaveCount(0);
         }
     }

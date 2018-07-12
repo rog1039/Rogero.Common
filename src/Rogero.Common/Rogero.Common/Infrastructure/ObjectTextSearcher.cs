@@ -7,18 +7,28 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Rogero.Common.ExtensionMethods;
+using Rogero.Options;
 
 namespace Rogero.Common
 {
     public class ObjectTextSearcher
     {
-        public static IEnumerable<T> Search<T>(IEnumerable<T> objects, string searchText)
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyInfoMap =
+            new ConcurrentDictionary<Type, PropertyInfo[]>();
+
+        public static IEnumerable<T> FindMatches<T>(IEnumerable<T> objects, string searchText)
         {
-            var itemProps = typeof(T).GetProperties();
+            var itemProps = GetProperties(typeof(T));
             foreach (var obj in objects)
             {
                 if (Search(itemProps, obj, searchText)) yield return obj;
             }
+        }
+
+        public static bool Search(object obj, string searchText)
+        {
+            var objectProperties = GetProperties(obj.GetType());
+            return Search(objectProperties, obj, searchText);
         }
 
         public static bool Search(PropertyInfo[] properties, object obj, string searchText)
@@ -100,5 +110,11 @@ namespace Rogero.Common
 
         private static bool DoNothingBoolTransform(bool b) => b;
         private static bool InvertBoolTransform(bool b) => !b;
+
+        private static PropertyInfo[] GetProperties(Type objectType)
+        {
+            var properties = PropertyInfoMap.GetOrAdd(objectType, t => t.GetProperties());
+            return properties;
+        }
     }
 }

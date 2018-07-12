@@ -63,7 +63,7 @@ namespace Rogero.Common.Selections
 
         protected virtual IEnumerable<T> GetSearchResults(string searchText)
         {
-            var matchingItems = ObjectTextSearcher.Search(Items, searchText);
+            var matchingItems = ObjectTextSearcher.FindMatches(Items, searchText);
             return matchingItems;
         }
 
