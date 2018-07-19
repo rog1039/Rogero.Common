@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using EnsureThat;
 using Rogero.Common.ExtensionMethods;
 using Rogero.Options;
 
@@ -16,10 +17,31 @@ namespace Rogero.Common
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyInfoMap =
             new ConcurrentDictionary<Type, PropertyInfo[]>();
 
-        public static IEnumerable<T> FindMatches<T>(IEnumerable<T> objects, string searchText)
+        public static IEnumerable<T> FindMatches<T>(IEnumerable<T> items, string searchText)
         {
+            if (typeof(T) == typeof(string))
+            {
+                var searchTerms = SearchTerm.ExtractAllTerms(searchText);
+                foreach (var item in items)
+                {
+                    var itemMatches = true;
+                    foreach (var searchTerm in searchTerms)
+                    {
+                        var searchMatch = searchTerm.MatchesAgainst(item as string);
+                        if (!searchMatch)
+                        {
+                            itemMatches = false;
+                            break;
+                        }
+                    }
+                    if(itemMatches) yield return item;
+                }
+
+                yield break;
+            }
+
             var itemProps = GetProperties(typeof(T));
-            foreach (var obj in objects)
+            foreach (var obj in items)
             {
                 if (Search(itemProps, obj, searchText)) yield return obj;
             }
@@ -115,6 +137,46 @@ namespace Rogero.Common
         {
             var properties = PropertyInfoMap.GetOrAdd(objectType, t => t.GetProperties());
             return properties;
+        }
+    }
+
+    public class SearchTerm
+    {
+        public bool NegativeSearch { get; }
+        public string TermText { get; }
+
+        private SearchTerm(bool negativeSearch, string termText)
+        {
+            NegativeSearch = negativeSearch;
+            TermText = termText;
+        }
+
+        public static IList<SearchTerm> ExtractAllTerms(string searchText)
+        {
+            var searchTerms = searchText
+                .Split(' ')
+                .Select(ExtractOneTerm)
+                .ToList();
+            return searchTerms;
+        }
+
+        public static SearchTerm ExtractOneTerm(string rawTerm)
+        {
+            Ensure.String.IsNotNullOrWhiteSpace(rawTerm);
+            rawTerm = rawTerm.Trim();
+
+            var isTermNegated = rawTerm.Length > 1 && rawTerm[0] == '-';
+
+            return isTermNegated
+                ? new SearchTerm(true, rawTerm.Remove(0, 1))
+                : new SearchTerm(false, rawTerm);
+        }
+
+        public bool MatchesAgainst(string text)
+        {
+            var textContainsThis = text.InsensitiveContains(TermText);
+
+            return NegativeSearch ? !textContainsThis : textContainsThis;
         }
     }
 }
