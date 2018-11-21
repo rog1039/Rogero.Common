@@ -33,7 +33,8 @@ namespace Rogero.Common.ExtensionMethods
 
             return true;
         }
-        
+
+
 //        public static bool IsPrimitive(this Type type)
 //        {
 //            if (type == typeof(String)) return true;
