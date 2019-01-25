@@ -34,6 +34,11 @@ namespace Rogero.Common.ExtensionMethods
             return true;
         }
 
+        public static bool IsNotNull(this object o)
+        {
+            return !(o is null);
+        }
+
 
 //        public static bool IsPrimitive(this Type type)
 //        {
