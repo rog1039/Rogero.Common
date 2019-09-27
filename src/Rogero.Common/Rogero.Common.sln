@@ -7,12 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common", "Rogero.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common.Tests", "Rogero.Common.Tests\Rogero.Common.Tests.csproj", "{874C63E3-7AD3-49C4-B18A-A5C964A016F0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\..\build\_build.csproj", "{AC559443-7C7C-4773-856B-2BBDCE142921}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC559443-7C7C-4773-856B-2BBDCE142921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC559443-7C7C-4773-856B-2BBDCE142921}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
