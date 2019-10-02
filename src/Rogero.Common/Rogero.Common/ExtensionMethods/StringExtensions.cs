@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,6 +97,25 @@ namespace Rogero.Common.ExtensionMethods
         {
             var charCount = Math.Min(s.Length, count);
             return s.Substring(s.Length - charCount, charCount);
+        }
+    }
+
+    public static class ArgumentValidationExtensions
+    {
+        public static T ThrowIfNull<T>(this T o, string paramName) where T : class
+        {
+            if (o == null)
+                throw new ArgumentNullException(paramName);
+
+            return o;
+        }
+
+        public static string ThrowIfNullOrWhitespace(this string s, string paramName) 
+        {
+            if (string.IsNullOrWhiteSpace(s))
+                throw new ArgumentNullException(paramName);
+
+            return s;
         }
     }
 }
