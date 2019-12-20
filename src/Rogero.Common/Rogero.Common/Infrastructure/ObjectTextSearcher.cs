@@ -71,7 +71,9 @@ namespace Rogero.Common
 
             var performingNegationSearch = searchText[0] == '-';
             searchText = performingNegationSearch ? searchText.RemoveLeft(1) : searchText;
-            var returnTransform = performingNegationSearch ? (Func<bool, bool>)InvertBoolTransform : DoNothingBoolTransform;
+            var resultTransform = performingNegationSearch
+                ? (Func<bool, bool>) InvertBoolTransform
+                : DoNothingBoolTransform;
 
             foreach (var propertyInfo in properties)
             {
@@ -80,40 +82,40 @@ namespace Rogero.Common
                 {
                     var value = (string)propertyInfo.GetValue(item);
                     var result = value != null && value.InsensitiveContains(searchText);
-                    if (result) return returnTransform(true);
+                    if (result) return resultTransform(true);
                 }
                 else if (type == typeof(int))
                 {
                     var value = ((int)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
-                    if (result) return returnTransform(true);
+                    if (result) return resultTransform(true);
                 }
                 else if (type == typeof(decimal))
                 {
                     var value = ((decimal)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
-                    if (result) return returnTransform(true);
+                    if (result) return resultTransform(true);
                 }
                 else if (type == typeof(double))
                 {
                     var value = ((double)propertyInfo.GetValue(item));
                     var result = value.ToString().InsensitiveContains(searchText);
-                    if (result) return returnTransform(true);
+                    if (result) return resultTransform(true);
                 }
                 else if (type == typeof(DateTime))
                 {
                     var value = ((DateTime) propertyInfo.GetValue(item));
                     var result = value.ToString("d").InsensitiveContains(searchText);
-                    if (result) return returnTransform(true);
+                    if (result) return resultTransform(true);
                 }
                 else if (type.ImplementsInterface<IEnumerable>())
                 {
-                    continue;
                     var value = (IEnumerable) propertyInfo.GetValue((item));
                     foreach (var child in value)
                     {
-                        var child_res = Matches(child.GetType().GetProperties(), child, searchText, depth + 1);
-                        if (child_res) returnTransform(true);
+                        var childProperties = GetProperties(child.GetType());
+                        var childMatchResult = Matches(childProperties, child, searchText, depth + 1);
+                        if (childMatchResult) return resultTransform(true);
                     }
                 }
                 else
@@ -121,10 +123,10 @@ namespace Rogero.Common
                     var val = propertyInfo.GetValue(item);
                     var props = type.GetProperties();
                     var result = Matches(props, val, searchText, depth + 1);
-                    if(result) return returnTransform(true);
+                    if(result) return resultTransform(true);
                 }
             }
-            return returnTransform(false);
+            return resultTransform(false);
         }
 
         private static bool DoNothingBoolTransform(bool b) => b;

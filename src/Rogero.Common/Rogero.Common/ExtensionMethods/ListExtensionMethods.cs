@@ -64,14 +64,23 @@ namespace Rogero.Common.ExtensionMethods
             return list.Count == 0;
         }
 
-        public static IEnumerable<T> Do<T>(this IEnumerable<T> list, Action<T> action)
+        public static IList<T> DoList<T>(this IList<T> list, Action<T> action)
         {
             foreach (var item in list)
             {
                 action(item);
-                yield return item;
             }
+            return list;
         }
+
+        // public static IEnumerable<T> Do<T>(this IEnumerable<T> list, Action<T> action)
+        // {
+        //     foreach (var item in list)
+        //     {
+        //         action(item);
+        //         yield return item;
+        //     }
+        // }
 
         public static void Remove<T>(this IList<T> list, Predicate<T> predicate)
         {

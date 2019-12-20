@@ -60,6 +60,30 @@ namespace Rogero.Common.Tests
             var result3 = ObjectTextSearcher.FindMatches(list, "d");
             result3.Should().HaveCount(0);
         }
+       
+        [Fact()]
+        [Trait("Category", "Instant")]
+        public void SearchListOfItems()
+        {
+            var obj = new HeaderObject()
+            {
+                Name = "Header",
+                LineObjects = new List<LineObject>()
+                {
+                    new LineObject()
+                    {
+                        Name = "Line1"
+                    },
+                    new LineObject()
+                    {
+                        Name = "Line2"
+                    }
+                }
+            };
+
+            var result = ObjectTextSearcher.Search(obj, "ine");
+            result.Should().BeTrue();
+        }
     }
 
     public class ObjectToSearch
@@ -76,5 +100,16 @@ namespace Rogero.Common.Tests
     public class Holder<T>
     {
         public T Value { get; set; }
+    }
+
+    public class HeaderObject
+    {
+        public string Name { get; set; }
+        public IList<LineObject> LineObjects { get; set; }
+    }
+
+    public class LineObject
+    {
+        public string Name { get; set; }
     }
 }
