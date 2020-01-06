@@ -98,6 +98,18 @@ namespace Rogero.Common.ExtensionMethods
             var charCount = Math.Min(s.Length, count);
             return s.Substring(s.Length - charCount, charCount);
         }
+
+        public static string StringJoin(this IEnumerable<string> list, string separator)
+        {
+            return string.Join(separator, list);
+        }
+
+        public static string EscapeString(this string s)
+        {
+            return s
+                .Replace("\\", "\\\\")  //escape backslashes
+                .Replace("\"", "\\\""); //escape quotations;
+        }
     }
 
     public static class ArgumentValidationExtensions
