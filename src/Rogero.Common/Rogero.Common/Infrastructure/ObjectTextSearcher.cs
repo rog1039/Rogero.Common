@@ -9,6 +9,14 @@ using Rogero.Common.ExtensionMethods;
 
 namespace Rogero.Common
 {
+    public static class ObjectTextSearcherExtensionMethods
+    {
+        public static IEnumerable<T> Search<T>(this IEnumerable<T> items, string searchText)
+        {
+            return ObjectTextSearcher.FindMatches(items, searchText);
+        }
+    }
+    
     public class ObjectTextSearcher
     {
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyInfoMap =
@@ -63,11 +71,11 @@ namespace Rogero.Common
             return true;
         }
 
-        private static bool Matches(PropertyInfo[] properties, object item, string searchText, int depth = 0)
+        private static bool Matches(PropertyInfo[] properties, object item, string searchText, int depth = 0, int maxDepth = 3)
         {
             if (item == null) return false;
             if (string.IsNullOrWhiteSpace(searchText)) return true;
-            if (depth > 3) return false;
+            if (depth > maxDepth) return false;
 
             var performingNegationSearch = searchText[0] == '-';
             searchText = performingNegationSearch ? searchText.RemoveLeft(1) : searchText;
