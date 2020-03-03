@@ -99,6 +99,7 @@
     <Compile Include="Infrastructure\ObjectTextSearcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selections\SearchableGenericSelector.cs" />
+    <Compile Include="WraparoundIndexCalc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
