@@ -77,10 +77,5 @@ namespace Rogero.Common.ExtensionMethods
                 buffer[j] = buffer[i];
             }
         }
-
-        public static IEnumerable<T> RemoveWhere<T>(this IEnumerable<T> source, Predicate<T> predicate)
-        {
-            return source.Where(z => !predicate(z));
-        }
     }
 }
