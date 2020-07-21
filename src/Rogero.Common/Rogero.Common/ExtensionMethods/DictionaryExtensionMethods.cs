@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Rogero.Options;
 
 namespace Rogero.Common.ExtensionMethods
@@ -26,6 +27,27 @@ namespace Rogero.Common.ExtensionMethods
             }
             return dict;
         }
+        
+        public static Dictionary<K, T> ToDictionaryAggregate<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc,
+            Func<T,T,T> valueAggregationFunc)
+        {
+            var dict = new Dictionary<K, T>();
+            foreach (var item in list)
+            {
+                var key = keyFunc(item);
+                if (dict.TryGetValue(key, out var val))
+                {
+                    var newVal = valueAggregationFunc(val, item);
+                    dict[key] = newVal;
+                }
+                else
+                {
+                    dict[key] = item;
+                }
+            }
+            return dict;
+        }
+
 
         public static SortedDictionary<K, IList<V>> ToSortedDictionaryMany<T, K, V>(this IEnumerable<T> list,
             Func<T, K> keyFunc,
