@@ -14,7 +14,7 @@ namespace Rogero.Common.ExtensionMethods
 
         public static ISet<T> Subtract<T>(this ISet<T> set, IEnumerable<T> itemsToRemove)
         {
-            var newSet = set.ToHashSet();
+            var newSet = set.MyToHashSet();
             foreach (var item in itemsToRemove)
             {
                 newSet.Remove(item);

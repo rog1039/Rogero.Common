@@ -54,7 +54,7 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
 
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable) => new HashSet<T>(enumerable);
+        public static HashSet<T> MyToHashSet<T>(this IEnumerable<T> enumerable) => new HashSet<T>(enumerable);
 
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng = null)
         {
