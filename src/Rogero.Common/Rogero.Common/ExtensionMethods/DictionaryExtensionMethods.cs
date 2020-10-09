@@ -48,6 +48,33 @@ namespace Rogero.Common.ExtensionMethods
             return dict;
         }
 
+        /// <summary>
+        /// Just like the built in ToDictionary but this will report what the duplicate key was if it exists.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="keyFunc"></param>
+        /// <param name="valueAggregationFunc"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="K"></typeparam>
+        /// <returns></returns>
+        public static Dictionary<K, T> ToDictionaryExplain<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc)
+        {
+            var dict = new Dictionary<K, T>();
+            foreach (var item in list)
+            {
+                var key = keyFunc(item);
+                if (dict.TryGetValue(key, out var val))
+                {
+                    throw new InvalidOperationException($"Duplicate key found: {key}");
+                }
+                else
+                {
+                    dict.Add(key, item);
+                }
+            }
+            return dict;
+        }
+
 
         public static SortedDictionary<K, IList<V>> ToSortedDictionaryMany<T, K, V>(this IEnumerable<T> list,
             Func<T, K> keyFunc,
