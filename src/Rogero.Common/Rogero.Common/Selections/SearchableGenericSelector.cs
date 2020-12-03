@@ -29,7 +29,7 @@ namespace Rogero.Common.Selections
                 : searchThrottleDelay;
             SearchText
                 .Throttle(_searchThrottleDelay)
-                .ObserveOnDispatcher()
+                .Observe()
                 .Subscribe(SearchTextChanged);
 
             //Listen for changes on the Items collection and update ItemsSource as needed.
