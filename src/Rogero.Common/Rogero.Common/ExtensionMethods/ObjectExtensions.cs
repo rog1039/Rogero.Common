@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Rogero.Options;
+using Optional;
 
 namespace Rogero.Common.ExtensionMethods
 {
@@ -13,12 +13,13 @@ namespace Rogero.Common.ExtensionMethods
     {
         public static Option<T> FirstNotNull<T>(this T obj, params T[] others)
         {
-            if (obj != null) return obj;
+            if (obj != null) return Option.Some(obj);
             foreach (var other in others)
             {
-                if (other != null) return other;
+                if (other != null) return Option.Some(other);
             }
-            return Option<T>.None;
+
+            return Option.None<T>();
         }
 
         /// <summary>

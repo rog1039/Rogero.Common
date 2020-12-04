@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Reactive.Bindings;
 using Rogero.Common.ExtensionMethods;
-using Rogero.ReactiveProperty;
+
 
 namespace Rogero.Common.Selections
 {
     public class GenericSelector<T>
     {
-        public ReactiveProperty<T> SelectedItem { get; } = new ReactiveProperty<T>(default(T));
-        public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
+        public ReactiveProperty<T>     SelectedItem { get; } = new ReactiveProperty<T>(default(T));
+        public ObservableCollection<T> Items        { get; } = new ObservableCollection<T>();
 
         public virtual void ReplaceItemSource(IEnumerable<T> records)
         {

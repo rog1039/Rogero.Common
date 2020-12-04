@@ -64,6 +64,9 @@
     <PackageReference Include="FluentAssertions">
       <Version>5.10.3</Version>
     </PackageReference>
+    <PackageReference Include="ReactiveProperty">
+      <Version>7.5.1</Version>
+    </PackageReference>
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
