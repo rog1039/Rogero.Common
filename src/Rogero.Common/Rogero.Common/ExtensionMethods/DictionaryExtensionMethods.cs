@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Rogero.Options;
+using Optional;
+using Optional.Collections;
 
 namespace Rogero.Common.ExtensionMethods
 {
@@ -99,13 +100,12 @@ namespace Rogero.Common.ExtensionMethods
             return dict;
         }
 
-        public static void AddToDictionary<K, V>(this IDictionary<K, IList<V>> dict, K key, V value)
+        public static void AddToDictionary<K, V>(this IDictionary<K, IList<V>> dict, K key, V newValue)
         {
-            var existingList = dict.TryGetValue(key);
-            if (existingList.HasValue)
-                existingList.Value.Add(value);
-            else
-                dict.Add(key, new List<V>() {value});
+            var existingListOption = dict.GetValueOrNone(key);
+            existingListOption.Match(existingList => existingList.Add(newValue),
+                               () => dict.Add(key, new List<V>() {newValue}));
+            
         }
 
         public static void AddRange<K, V>(this IDictionary<K, IList<V>> dict, IList<V> values, Func<V, K> keyFunc)

@@ -6,8 +6,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Threading;
+using Reactive.Bindings;
 using Rogero.Common.ExtensionMethods;
-using Rogero.ReactiveProperty;
+
 
 namespace Rogero.Common.Selections
 {
@@ -29,7 +30,7 @@ namespace Rogero.Common.Selections
                 : searchThrottleDelay;
             SearchText
                 .Throttle(_searchThrottleDelay)
-                .Observe()
+                .ObserveOnDispatcher()
                 .Subscribe(SearchTextChanged);
 
             //Listen for changes on the Items collection and update ItemsSource as needed.

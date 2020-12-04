@@ -1,6 +1,7 @@
-using Rogero.ReactiveProperty;
+
 using System;
 using System.Collections.ObjectModel;
+using Reactive.Bindings;
 
 namespace Rogero.Common.Selections
 {
@@ -10,7 +11,7 @@ namespace Rogero.Common.Selections
 
         public static void MoveUp<T>(ObservableCollection<T> collection, ReactiveProperty<T> current)
         {
-            var index = collection.IndexOf(current);
+            var index = collection.IndexOf(current.Value);
             if (index == -1 || index == 0)
             {
                 MoveToEnd(collection, current);
@@ -34,7 +35,7 @@ namespace Rogero.Common.Selections
 
         public static void MoveDown<T>(ObservableCollection<T> collection, ReactiveProperty<T> current)
         {
-            var index = collection.IndexOf(current);
+            var index = collection.IndexOf(current.Value);
             if (index == -1 || index == FinalIndex(collection))
             {
                 MoveToStart(collection, current);
