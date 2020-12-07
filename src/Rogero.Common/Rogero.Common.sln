@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\..\build\_buil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.CommonNetStandard", "Rogero.CommonNetStandard\Rogero.CommonNetStandard.csproj", "{E021F576-11FD-4F2F-A29D-C9DF996157DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common.WpfNetStandard", "Rogero.Common.WpfNetStandard\Rogero.Common.WpfNetStandard.csproj", "{9C22E178-2F15-4313-8C0E-DE79DFA126D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
