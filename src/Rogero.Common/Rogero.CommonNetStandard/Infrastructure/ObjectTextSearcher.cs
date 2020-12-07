@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Rogero.Common.ExtensionMethods;
 
-namespace Rogero.Common
+namespace Rogero.Common.Infrastructure
 {
     public static class ObjectTextSearcherExtensionMethods
     {

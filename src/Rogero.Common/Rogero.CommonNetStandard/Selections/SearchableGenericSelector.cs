@@ -8,6 +8,7 @@ using System.Reflection;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Rogero.Common.ExtensionMethods;
+using Rogero.Common.Infrastructure;
 
 
 namespace Rogero.Common.Selections
