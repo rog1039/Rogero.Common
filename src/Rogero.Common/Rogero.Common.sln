@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common", "Rogero.Common\Rogero.Common.csproj", "{F129BCCC-A9C3-49D0-A039-4263320A3D8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.CommonFramework", "Rogero.CommonFramework\Rogero.CommonFramework.csproj", "{F129BCCC-A9C3-49D0-A039-4263320A3D8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common.Tests", "Rogero.Common.Tests\Rogero.Common.Tests.csproj", "{874C63E3-7AD3-49C4-B18A-A5C964A016F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.CommonFramework.Tests", "Rogero.CommonFramework.Tests\Rogero.CommonFramework.Tests.csproj", "{874C63E3-7AD3-49C4-B18A-A5C964A016F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\..\build\_build.csproj", "{AC559443-7C7C-4773-856B-2BBDCE142921}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.CommonNetStandard", "Rogero.CommonNetStandard\Rogero.CommonNetStandard.csproj", "{E021F576-11FD-4F2F-A29D-C9DF996157DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common", "Rogero.Common\Rogero.Common.csproj", "{E021F576-11FD-4F2F-A29D-C9DF996157DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common.WpfNetStandard", "Rogero.Common.WpfNetStandard\Rogero.Common.WpfNetStandard.csproj", "{9C22E178-2F15-4313-8C0E-DE79DFA126D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common.Tests", "Rogero.Common.Tests\Rogero.Common.Tests.csproj", "{C1DFC115-1D18-4389-821B-5BD1157152AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,10 @@ Global
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C22E178-2F15-4313-8C0E-DE79DFA126D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DFC115-1D18-4389-821B-5BD1157152AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DFC115-1D18-4389-821B-5BD1157152AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DFC115-1D18-4389-821B-5BD1157152AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DFC115-1D18-4389-821B-5BD1157152AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

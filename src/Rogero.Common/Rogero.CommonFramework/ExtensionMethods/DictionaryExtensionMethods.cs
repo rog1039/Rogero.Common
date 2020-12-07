@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using Optional;
 using Optional.Collections;
 
 namespace Rogero.Common.ExtensionMethods

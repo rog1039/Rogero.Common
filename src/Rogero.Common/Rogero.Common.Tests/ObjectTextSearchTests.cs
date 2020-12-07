@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Rogero.Common.ExtensionMethods;
+using Rogero.Common.Infrastructure;
 using Xunit;
 
 namespace Rogero.Common.Tests
