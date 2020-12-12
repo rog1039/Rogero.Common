@@ -100,6 +100,15 @@ namespace Rogero.Common.ExtensionMethods
                 if (shouldRemove) list.RemoveAt(i);
             }
         }
+        
+        public static void ForEach<T>(this IList<T> items, Action<T,int> action)
+        {
+            for (var index = 0; index < items.Count; index++)
+            {
+                var item = items[index];
+                action(item, index);
+            }
+        }
     }
 
     public enum SortOrder
