@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Rogero.Common.ExtensionMethods
@@ -98,15 +99,6 @@ namespace Rogero.Common.ExtensionMethods
                 var item = list[i];
                 var shouldRemove = comparer.Equals(item, itemToRemove);
                 if (shouldRemove) list.RemoveAt(i);
-            }
-        }
-        
-        public static void ForEach<T>(this IList<T> items, Action<T,int> action)
-        {
-            for (var index = 0; index < items.Count; index++)
-            {
-                var item = items[index];
-                action(item, index);
             }
         }
     }

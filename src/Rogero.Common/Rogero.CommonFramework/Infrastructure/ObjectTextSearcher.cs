@@ -4,9 +4,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using EnsureThat;
 using Rogero.Common.ExtensionMethods;
 
-namespace Rogero.Common.Infrastructure
+namespace Rogero.Common
 {
     public static class ObjectTextSearcherExtensionMethods
     {
@@ -195,9 +196,7 @@ namespace Rogero.Common.Infrastructure
 
         public static SearchTerm ExtractOneTerm(string rawTerm)
         {
-            if (string.IsNullOrWhiteSpace(rawTerm))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(rawTerm));
-            
+            Ensure.String.IsNotNullOrWhiteSpace(rawTerm);
             rawTerm = rawTerm.Trim();
 
             var isTermNegated = rawTerm.Length > 1 && rawTerm[0] == '-';

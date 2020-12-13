@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Rogero.Common.ExtensionMethods
 {
@@ -74,13 +77,5 @@ namespace Rogero.Common.ExtensionMethods
                 buffer[j] = buffer[i];
             }
         }
-
-        // public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
-        // {
-        //     foreach (var item in items)
-        //     {
-        //         action(item);
-        //     }
-        // }
     }
 }
