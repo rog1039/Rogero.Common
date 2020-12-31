@@ -10,8 +10,9 @@ namespace Rogero.Common.ExtensionMethods
 {
     public static class TableParserExtensions
     {
-        public static void PrintStringTable<T>(this IEnumerable<T> values)
+        public static void PrintStringTable<T>(this IEnumerable<T> values, string tableTitle = null)
         {
+            if (tableTitle.IsNotNullOrWhitespace()) Console.WriteLine(tableTitle);
             Console.WriteLine(values.ToStringTable());
         }
         public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
