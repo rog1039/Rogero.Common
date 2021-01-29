@@ -46,7 +46,26 @@ namespace Rogero.Common.ExtensionMethods
 
             //So instead, let's check the type of the first element
             var type = values.First().GetType();
-            return type.GetProperties();
+            return GetBasePropertiesFirst(type);
+        }
+
+        // this is alternative for typeof(T).GetProperties()
+        // that returns base class properties before inherited class properties
+        private static PropertyInfo[] GetBasePropertiesFirst(Type type)
+        {
+            var orderList     = new List<Type>();
+            var iteratingType = type;
+            do
+            {
+                orderList.Insert(0, iteratingType);
+                iteratingType = iteratingType.BaseType;
+            } while (iteratingType != null);
+
+            var props = type.GetProperties()
+                .OrderBy(x => orderList.IndexOf(x.DeclaringType))
+                .ToArray();
+
+            return props;
         }
 
         public static string ToStringTable<T>(this IEnumerable<T> values, string[] columnHeaders, params Func<T, object>[] valueSelectors)
