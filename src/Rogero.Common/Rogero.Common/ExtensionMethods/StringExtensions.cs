@@ -106,24 +106,49 @@ namespace Rogero.Common.ExtensionMethods
                 .Replace("\\", "\\\\")  //escape backslashes
                 .Replace("\"", "\\\""); //escape quotations;
         }
-    }
-
-    public static class ArgumentValidationExtensions
-    {
-        public static T ThrowIfNull<T>(this T o, string paramName) where T : class
+        
+        public static string SmartCombine(this string separator, params string[] pieces)
         {
-            if (o == null)
-                throw new ArgumentNullException(paramName);
+            var isFirst              = true;
+            var sb                   = new StringBuilder();
+            var hasTrailingSeparator = false;
+            foreach (var piece in pieces)
+            {
+                if (isFirst)
+                {
+                    sb.Append(piece);
+                    isFirst = false;
+                }
+                else
+                {
+                    var startsWithSeparator = piece.StartsWith(separator);
+                    switch (hasTrailingSeparator)
+                    {
+                        case true when startsWithSeparator:
+                            sb.Append(piece[1..]);
+                            break;
+                        case true when !startsWithSeparator:
+                        case false when startsWithSeparator:
+                            sb.Append(piece);
+                            break;
+                        case false when !startsWithSeparator:
+                            sb.Append(separator);
+                            sb.Append(piece);
+                            break;
+                    }
+                }
 
-            return o;
+                hasTrailingSeparator = piece.EndsWith(separator);
+            }
+
+            return sb.ToString();
         }
 
-        public static string ThrowIfNullOrWhitespace(this string s, string paramName) 
+        public static string IfNullOrWhitespaceThen(this string s, string fallbackValue)
         {
-            if (string.IsNullOrWhiteSpace(s))
-                throw new ArgumentNullException(paramName);
-
-            return s;
+            return s.IsNullOrWhitespace() 
+                ? fallbackValue 
+                : s;
         }
     }
 }

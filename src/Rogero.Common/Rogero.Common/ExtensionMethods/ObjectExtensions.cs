@@ -34,6 +34,7 @@ namespace Rogero.Common.ExtensionMethods
             return !(o is null);
         }
 
+        
 
 //        public static bool IsPrimitive(this Type type)
 //        {
