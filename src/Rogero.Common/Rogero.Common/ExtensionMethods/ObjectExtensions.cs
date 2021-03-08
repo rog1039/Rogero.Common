@@ -34,6 +34,23 @@ namespace Rogero.Common.ExtensionMethods
             return !(o is null);
         }
 
+        public static TReturn Map<T, TReturn>(this T obj, Func<T, TReturn> func)
+        where T : class
+        where TReturn : class
+        {
+            if (obj != null) return func(obj);
+            return null;
+        }
+
+        public static TReturn Match<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
+        {
+            if (obj is null)
+            {
+                return some(obj);
+            }
+
+            return none();
+        }
         
 
 //        public static bool IsPrimitive(this Type type)

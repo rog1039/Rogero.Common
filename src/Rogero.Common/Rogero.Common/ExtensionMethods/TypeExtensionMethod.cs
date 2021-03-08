@@ -27,13 +27,44 @@ namespace Rogero.Common.ExtensionMethods
             if (isNullable) return true;
 
             //Check nullable attribute: https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
-            return HasNullableAttribute(type);
+            return HasNullableAttributeSetTo2(type);
         }
 
-        public static bool HasNullableAttribute(this Type type)
+        /// <summary>
+        /// See https://codeblog.jonskeet.uk/2019/02/10/nullableattribute-and-c-8/ for an explanation.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool HasNullableAttributeSetTo2(this Type type)
         {
-            var attribute = type.GetAttributeSingleOrDefault("NullableAttribute", true);
-            return attribute != null;
+            var nullableAttribute = type.GetAttributeSingleOrDefault("NullableAttribute", false);
+
+            var isNullable = nullableAttribute
+                .Map(attribute => attribute.GetType().GetProperty("NullableFlags"))
+                .Map(flagsProp => flagsProp.GetValue(nullableAttribute) as byte[])
+                .Match(
+                    (bytes => bytes[0] == 2 ? true : false),
+                    () => false);
+        
+     
+        
+            /*
+             * Old way this method worked -- should be functionally equivalent to the above code but written in the traditional imperative style.
+             */
+            var nullableAttribute2      = type.GetAttributeSingleOrDefault("NullableAttribute", true);
+            if (nullableAttribute2 is null) return false;
+            
+            var flagsAttribute = nullableAttribute2.GetType().GetProperty("NullableFlags");
+            if (flagsAttribute is null) return false;
+
+            var flagsValue = flagsAttribute.GetValue(nullableAttribute2);
+            if (flagsValue is null) return false;
+
+            return flagsValue switch
+            {
+                byte[] bytes when bytes[0] == 2 => true,
+                _                               => false
+            };
         }
         
         public static object GetAttributeSingleOrDefault(this Type type, string attributeName,
