@@ -75,12 +75,12 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
 
-        // public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
-        // {
-        //     foreach (var item in items)
-        //     {
-        //         action(item);
-        //     }
-        // }
+        public static void MyForEach<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items)
+            {
+                action(item);
+            }
+        }
     }
 }

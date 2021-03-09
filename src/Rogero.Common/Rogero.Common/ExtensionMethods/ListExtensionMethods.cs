@@ -109,6 +109,14 @@ namespace Rogero.Common.ExtensionMethods
                 action(item, index);
             }
         }
+        public static void ForEach<T>(this IList<T> items, Action<T> action)
+        {
+            for (var index = 0; index < items.Count; index++)
+            {
+                var item = items[index];
+                action(item);
+            }
+        }
     }
 
     public enum SortOrder
