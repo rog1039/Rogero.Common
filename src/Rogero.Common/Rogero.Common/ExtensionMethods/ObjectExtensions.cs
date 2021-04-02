@@ -34,7 +34,7 @@ namespace Rogero.Common.ExtensionMethods
             return !(o is null);
         }
 
-        public static TReturn Map<T, TReturn>(this T obj, Func<T, TReturn> func)
+        public static TReturn ObjNullMap<T, TReturn>(this T obj, Func<T, TReturn> func)
         where T : class
         where TReturn : class
         {
@@ -42,7 +42,7 @@ namespace Rogero.Common.ExtensionMethods
             return null;
         }
 
-        public static TReturn Match<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
+        public static TReturn ObjNullMatch<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
         {
             if (obj is null)
             {

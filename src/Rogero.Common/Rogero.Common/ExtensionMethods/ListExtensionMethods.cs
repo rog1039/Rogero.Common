@@ -101,7 +101,7 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
         
-        public static void ForEach<T>(this IList<T> items, Action<T,int> action)
+        public static void MyForEach<T>(this IList<T> items, Action<T,int> action)
         {
             for (var index = 0; index < items.Count; index++)
             {

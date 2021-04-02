@@ -40,9 +40,9 @@ namespace Rogero.Common.ExtensionMethods
             var nullableAttribute = type.GetAttributeSingleOrDefault("NullableAttribute", false);
 
             var isNullable = nullableAttribute
-                .Map(attribute => attribute.GetType().GetProperty("NullableFlags"))
-                .Map(flagsProp => flagsProp.GetValue(nullableAttribute) as byte[])
-                .Match(
+                .ObjNullMap(attribute => attribute.GetType().GetProperty("NullableFlags"))
+                .ObjNullMap(flagsProp => flagsProp.GetValue(nullableAttribute) as byte[])
+                .ObjNullMatch(
                     (bytes => bytes[0] == 2 ? true : false),
                     () => false);
         
