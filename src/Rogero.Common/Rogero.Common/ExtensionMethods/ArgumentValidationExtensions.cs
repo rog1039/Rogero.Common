@@ -2,7 +2,7 @@ using System;
 
 public static class ArgumentValidationExtensions
 {
-    public static T ThrowIfNull<T>(this T o, string paramName) where T : class
+    public static T ThrowIfNull<T>(this T? o, string paramName) where T : class
     {
         if (o == null)
             throw new ArgumentNullException(paramName);

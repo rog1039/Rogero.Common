@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Rogero.Common.ExtensionMethods
 {
@@ -14,58 +16,6 @@ namespace Rogero.Common.ExtensionMethods
             var implementsInterface = interfaces.Any(i => i.AssemblyQualifiedName == typeof(T).AssemblyQualifiedName);
             return implementsInterface;
         }
-
-        public static void Test()
-        {
-            var basetype = typeof(object).BaseType;
-            var f1 = typeof(TypeExtensionMethod).ImplementsInterface<ICloneable>();
-        }
-        
-        public static bool IsNullable(this Type type)
-        {
-            var isNullable = Nullable.GetUnderlyingType(type) != null;
-            if (isNullable) return true;
-
-            //Check nullable attribute: https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
-            return HasNullableAttributeSetTo2(type);
-        }
-
-        /// <summary>
-        /// See https://codeblog.jonskeet.uk/2019/02/10/nullableattribute-and-c-8/ for an explanation.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static bool HasNullableAttributeSetTo2(this Type type)
-        {
-            var nullableAttribute = type.GetAttributeSingleOrDefault("NullableAttribute", false);
-
-            var isNullable = nullableAttribute
-                .ObjNullMap(attribute => attribute.GetType().GetProperty("NullableFlags"))
-                .ObjNullMap(flagsProp => flagsProp.GetValue(nullableAttribute) as byte[])
-                .ObjNullMatch(
-                    (bytes => bytes[0] == 2 ? true : false),
-                    () => false);
-        
-     
-        
-            /*
-             * Old way this method worked -- should be functionally equivalent to the above code but written in the traditional imperative style.
-             */
-            var nullableAttribute2      = type.GetAttributeSingleOrDefault("NullableAttribute", true);
-            if (nullableAttribute2 is null) return false;
-            
-            var flagsAttribute = nullableAttribute2.GetType().GetProperty("NullableFlags");
-            if (flagsAttribute is null) return false;
-
-            var flagsValue = flagsAttribute.GetValue(nullableAttribute2);
-            if (flagsValue is null) return false;
-
-            return flagsValue switch
-            {
-                byte[] bytes when bytes[0] == 2 => true,
-                _                               => false
-            };
-        }
         
         public static object GetAttributeSingleOrDefault(this Type type, string attributeName,
                                                          bool      inheritBaseAttributes = false)
@@ -75,10 +25,59 @@ namespace Rogero.Common.ExtensionMethods
                 .SingleOrDefault(z => z.GetType().Name == attributeName);
             return attribute;
         }
-    }
 
-    public static class TaskExtensionMethods
-    {
-        public static Task<T> ToTask<T>(this T obj) => Task.FromResult(obj);
+        public static object GetAttributeSingleOrDefault(this MemberInfo memberInfo, string attributeName,
+                                                         bool            inheritBaseAttributes = false)
+        {
+            var attribute = memberInfo
+                .GetCustomAttributes(inheritBaseAttributes)
+                .SingleOrDefault(z => z.GetType().Name == attributeName);
+            return attribute;
+        }
+
+        public static object GetAttributeSingleOrDefault(this ParameterInfo parameterfInfo, string attributeName,
+                                                         bool            inheritBaseAttributes = false)
+        {
+            var attribute = parameterfInfo
+                .GetCustomAttributes(inheritBaseAttributes)
+                .SingleOrDefault(z => z.GetType().Name == attributeName);
+            return attribute;
+        }
+
+        public static T GetSingleAttributeIncludingFromInterfaces<T>(this Type type)
+        {
+            var typeAttributes = type
+                .GetCustomAttributes(true)
+                .WhereCastTo<T>();
+            
+            var interfaces     = type.GetInterfaces();
+            var attributes = interfaces
+                .SelectMany(z => z.GetCustomAttributes(true))
+                .WhereCastTo<T>()
+                .Concat(typeAttributes);
+
+            return attributes.Single();
+        }
+
+        public static IList<Type> GetSelfAndInnerTypes(this Type type)
+        {
+            var types = new List<Type>();
+
+            var queue = new Queue<Type>(){};
+            queue.Enqueue(type);
+            while (queue.Count > 0)
+            {
+                var item = queue.Dequeue();
+                types.Add(item);
+                item.GenericTypeArguments
+                    .MyForEach(z => queue.Enqueue(z));
+            }
+
+            return types.Distinct().ToList();
+        }
+
+        static TypeExtensionMethod()
+        {
+        }
     }
 }

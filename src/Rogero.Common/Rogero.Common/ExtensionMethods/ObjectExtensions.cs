@@ -44,7 +44,7 @@ namespace Rogero.Common.ExtensionMethods
 
         public static TReturn ObjNullMatch<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
         {
-            if (obj is null)
+            if (obj is not null)
             {
                 return some(obj);
             }

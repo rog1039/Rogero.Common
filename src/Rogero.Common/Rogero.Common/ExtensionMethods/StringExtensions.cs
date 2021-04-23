@@ -17,6 +17,12 @@ namespace Rogero.Common.ExtensionMethods
             return "{" + input + "}";
         }
 
+        public static string Parenthesize(this string input)
+        {
+            return "(" + input + ")";
+        }
+        
+
         public static string Repeat(this string input, int repeatCount)
         {
             StringBuilder sb = new StringBuilder();
@@ -149,6 +155,16 @@ namespace Rogero.Common.ExtensionMethods
             return s.IsNullOrWhitespace() 
                 ? fallbackValue 
                 : s;
+        }
+
+        public static string ToCamelCase(string name)
+        {
+            return $"{name[..1].ToLower()}{name.Substring(1, name.Length - 1)}";
+        }
+
+        public static string NamespaceToPath(this string text)
+        {
+            return text.Replace(".", "/");
         }
     }
 }
