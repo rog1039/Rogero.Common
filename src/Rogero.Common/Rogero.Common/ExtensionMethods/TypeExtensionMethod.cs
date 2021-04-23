@@ -75,6 +75,24 @@ namespace Rogero.Common.ExtensionMethods
 
             return types.Distinct().ToList();
         }
+        
+        public static string ToClosedTypeName(this Type type)
+        {
+            if (!type.IsGenericType) return type.Name;
+
+            var genericTypes = type
+                    .GetGenericArguments()
+                    .Select(ga => ga.ToClosedTypeName())
+                ;
+            var genericText    = string.Join(", ", genericTypes);
+            var argCountLength = type.GetGenericArguments().Length.ToString().Length;
+            var suffixLength   = 1 + argCountLength; // ex: `1, `3, `17
+            var nonSuffixedTypeName = type
+                .GetGenericTypeDefinition()
+                .Name[..^suffixLength];
+            
+            return $"{nonSuffixedTypeName}<{genericText}>";
+        }
 
         static TypeExtensionMethod()
         {
