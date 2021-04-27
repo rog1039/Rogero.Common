@@ -44,6 +44,22 @@ namespace Rogero.Common.ExtensionMethods
             return attribute;
         }
 
+        public static T GetAttributeSingleOrDefault<T>(this Type type, bool inheritBaseAttributes = false)
+        {
+            var attribute = type
+                .GetCustomAttributes(inheritBaseAttributes)
+                .SingleOrDefault(z => z.GetType() == typeof(T));
+            return (T) attribute;
+        }
+
+        public static T GetAttributeSingle<T>(this Type type, bool inheritBaseAttributes = false)
+        {
+            var attribute = type
+                .GetCustomAttributes(inheritBaseAttributes)
+                .Single(z => z.GetType() == typeof(T));
+            return (T) attribute;
+        }
+        
         public static T GetSingleAttributeIncludingFromInterfaces<T>(this Type type)
         {
             var typeAttributes = type
@@ -92,6 +108,12 @@ namespace Rogero.Common.ExtensionMethods
                 .Name[..^suffixLength];
             
             return $"{nonSuffixedTypeName}<{genericText}>";
+        }
+
+        public static bool IsClosedGenericOf(this Type type, Type genericType)
+        {
+            if (type.GenericTypeArguments.Length == 0) return false;
+            return type.GetGenericTypeDefinition() == genericType;
         }
 
         static TypeExtensionMethod()

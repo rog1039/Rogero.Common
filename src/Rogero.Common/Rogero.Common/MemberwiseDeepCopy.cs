@@ -5,7 +5,7 @@ using Rogero.Common.ArrayExtensions;
 
 namespace Rogero.Common
 {
-    public static class ObjectExtensions
+    public static class ObjectCloneExtensions
     {
         private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
 

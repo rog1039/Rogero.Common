@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Optional;
 
 namespace Rogero.Common.ExtensionMethods
@@ -51,6 +52,34 @@ namespace Rogero.Common.ExtensionMethods
 
             return none();
         }
+
+        public static ObjectTaskAnalysis DetermineTaskTypeFromObject(this object obj)
+        {
+            var type = obj.GetType();
+            return DetermineTaskTypeFromType(type);
+        }
+
+        public static ObjectTaskAnalysis DetermineTaskTypeFromType(this Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            {
+                return ObjectTaskAnalysis.TaskOfT;
+            }
+
+            if (type == typeof(Task))
+            {
+                return ObjectTaskAnalysis.Task;
+            }
+
+            return ObjectTaskAnalysis.Neither;
+        }
+
+        public static Task<T> AsTask<T>(this object obj)
+        {
+            return obj is Task<T> task 
+                ? task 
+                : Task.FromResult((T) obj);
+        }
         
 
 //        public static bool IsPrimitive(this Type type)
@@ -80,4 +109,6 @@ namespace Rogero.Common.ExtensionMethods
         //    }
         //}
     }
+    
+    public enum ObjectTaskAnalysis{ Neither, Task, TaskOfT}
 }
