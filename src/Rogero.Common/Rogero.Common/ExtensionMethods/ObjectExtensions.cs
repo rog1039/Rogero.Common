@@ -76,9 +76,10 @@ namespace Rogero.Common.ExtensionMethods
 
         public static Task<T> AsTask<T>(this object obj)
         {
-            return obj is Task<T> task 
-                ? task 
-                : Task.FromResult((T) obj);
+            if (obj is Task<T> task)
+                return task;
+            else
+                return Task.FromResult((T) obj);
         }
         
 
