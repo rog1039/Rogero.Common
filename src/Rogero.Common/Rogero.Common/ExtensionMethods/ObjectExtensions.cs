@@ -52,6 +52,16 @@ namespace Rogero.Common.ExtensionMethods
 
             return none();
         }
+        
+        #nullable enable
+        public static void ObjNullMatch<T>(this T obj, Action<T> some)
+        {
+            if (obj is not null)
+            {
+                some(obj);
+            }
+        }
+        #nullable disable
 
         public static ObjectTaskAnalysis DetermineTaskTypeFromObject(this object obj)
         {
