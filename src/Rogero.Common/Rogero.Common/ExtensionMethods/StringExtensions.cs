@@ -21,7 +21,7 @@ namespace Rogero.Common.ExtensionMethods
         {
             return "(" + input + ")";
         }
-        
+
 
         public static string Repeat(this string input, int repeatCount)
         {
@@ -59,7 +59,7 @@ namespace Rogero.Common.ExtensionMethods
             result = result.Replace("\r", "");
             result = result.Replace("\n", "");
             result = result.Replace("\t", "");
-            
+
             return result;
         }
 
@@ -69,8 +69,9 @@ namespace Rogero.Common.ExtensionMethods
             return s.Substring(numberOfCharacters, s.Length - numberOfCharacters);
         }
 
-        public static void ToConsoleWriteLine(this string s)
+        public static void ToConsoleWriteLine(this string s, string title = null)
         {
+            if (title.IsNotNullOrWhitespace()) Console.WriteLine(title);
             Console.WriteLine(s);
         }
 
@@ -112,7 +113,7 @@ namespace Rogero.Common.ExtensionMethods
                 .Replace("\\", "\\\\")  //escape backslashes
                 .Replace("\"", "\\\""); //escape quotations;
         }
-        
+
         public static string SmartCombine(this string separator, params string[] pieces)
         {
             var isFirst              = true;
@@ -152,8 +153,8 @@ namespace Rogero.Common.ExtensionMethods
 
         public static string IfNullOrWhitespaceThen(this string s, string fallbackValue)
         {
-            return s.IsNullOrWhitespace() 
-                ? fallbackValue 
+            return s.IsNullOrWhitespace()
+                ? fallbackValue
                 : s;
         }
 

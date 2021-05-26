@@ -58,7 +58,7 @@ namespace Rogero.Common.ExtensionMethods
         {
             if (obj is not null)
             {
-                some(obj);
+                some(obj!);
             }
         }
         #nullable disable
