@@ -12,7 +12,10 @@ namespace Rogero.Common.ExtensionMethods
     {
         public static void PrintStringTable<T>(this IEnumerable<T> values, string tableTitle = null)
         {
-            if (tableTitle.IsNotNullOrWhitespace()) Console.WriteLine(tableTitle);
+            if (tableTitle.IsNotNullOrWhitespace())
+            {
+                Console.WriteLine(tableTitle + $"   ***Count: {values.Count()}");
+            }
             Console.WriteLine(values.ToStringTable());
         }
         public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
