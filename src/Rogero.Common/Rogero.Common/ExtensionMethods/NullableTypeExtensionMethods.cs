@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 
 namespace Rogero.Common.ExtensionMethods
 {
@@ -10,24 +12,25 @@ namespace Rogero.Common.ExtensionMethods
 
         //Check nullable attribute: https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
         //Jon Skeet: https://codeblog.jonskeet.uk/2019/02/10/nullableattribute-and-c-8/
-        private static readonly int MagicNullableByteValue = 2;
+        private static readonly int MagicNonNullableByteValue = 1;
+        private static readonly int MagicNullableByteValue    = 2;
 
         public static bool ReturnIsNullable(this MethodInfo methodInfo)
         {
             var nullableContextAttribute = methodInfo
                 .CustomAttributes
                 .SingleOrDefault(z => z.AttributeType.Name.Equals("NullableContextAttribute"));
-            
+
             if (nullableContextAttribute is null || nullableContextAttribute.ConstructorArguments.Count == 0)
             {
                 return false;
             }
 
             var firstTypedArg = nullableContextAttribute.ConstructorArguments[0];
-            
+
             return firstTypedArg.Value is byte b && b == MagicNullableByteValue;
         }
-        
+
         public static byte[] GetNullableAttributeByteArray(this ParameterInfo propertyInfo)
         {
             var nullableAttribute = propertyInfo.GetAttributeSingleOrDefault("NullableAttribute");
@@ -53,12 +56,133 @@ namespace Rogero.Common.ExtensionMethods
             return isNullable;
         }
 
-        public static bool IsNullable(this MemberInfo propertyInfo)
+        public static Type GetMemberType(MemberInfo memberInfo)
+        {
+            switch (memberInfo)
+            {
+                case ComAwareEventInfo comAwareEventInfo:
+                    break;
+                case EventInfo eventInfo:
+                    break;
+                case ConstructorBuilder constructorBuilder:
+                    break;
+                case DynamicMethod dynamicMethod:
+                    break;
+                case EnumBuilder enumBuilder:
+                    break;
+                case FieldBuilder fieldBuilder:
+                    break;
+                case GenericTypeParameterBuilder genericTypeParameterBuilder:
+                    break;
+                case MethodBuilder methodBuilder:
+                    break;
+                case PropertyBuilder propertyBuilder:
+                    break;
+                case TypeBuilder typeBuilder:
+                    break;
+                case ConstructorInfo constructorInfo:
+                    break;
+                case FieldInfo fieldInfo:
+                    return fieldInfo.FieldType;
+                    break;
+                case MethodInfo methodInfo:
+                    break;
+                case MethodBase methodBase:
+                    break;
+                case PropertyInfo propertyInfo:
+                    return propertyInfo.PropertyType;
+                    break;
+                case TypeDelegator typeDelegator:
+                    break;
+                case TypeInfo typeInfo:
+                    break;
+                case Type type:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(memberInfo));
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public static bool IsNullable(this MemberInfo memberInfo)
+        {
+            var memberType  = GetMemberType(memberInfo);
+            var isValueType = memberType.IsValueType;
+            if (isValueType)
+            {
+                /*
+                 * If the type is a value type, and it is not wrapped in a nullable type, then it must be
+                 * non-nullable. The nullable attribute code below only applies to non-value type types.
+                 */
+                var isBuiltInNullable = IsBuiltInNullableType(memberInfo);
+                return isBuiltInNullable;
+            }
+
+            /*
+             * Check the metadata of a reference type via attributes.
+             * There is a field/property level NullableAttribute and an owning-type NullableContextAttribute.
+             * NullableAttribute takes precedence and in it's absence we look for a NullableContextAttribute.
+             * If both are missing then I think the code is null-oblivious.
+             */
+
+            var nullableAttribute      = memberInfo.GetAttributeSingleOrDefault("NullableAttribute");
+            var nullableAttributeValue = GetNullableAttributeValue(nullableAttribute);
+
+            switch (nullableAttributeValue)
+            {
+                case 0:
+                    //Fall through since 0 means nothing, still need to check for NullableContextAttribute
+                    break;
+                case 1:
+                    return false;
+                case 2:
+                    return true;
+            }
+
+            /*
+             * Now, we may need to examine the declaring type for a NullableContextAttribute. However, it should be noted
+             * that NullableContextAttribute only applies to fields that are **not** reference types.
+             * See:
+             * https://github.com/dotnet/roslyn/blob/main/docs/features/nullable-metadata.md
+             *
+             * Also, might be worth reading:
+             * https://github.com/OData/ModelBuilder/issues/16
+             */
+
+            var declaringType = memberInfo.DeclaringType;
+            var nullableContextAttribute = declaringType.GetAttributeSingleOrDefault("NullableContextAttribute");
+            var nullableContextValue = GetNullableContextAttributeValue(nullableContextAttribute);
+
+            return nullableContextValue switch
+            {
+                //A 0 means the type is nullable oblivious and is thus not nullable.
+                0 => false,
+                //1 is not-nullable
+                1 => false,
+                //2 is nullable
+                2 => true,
+                //Should never get here... since the 0,1,2 should be all possible cases above.
+                _ => false
+            };
+        }
+
+        public static bool IsNullable2(this MemberInfo propertyInfo)
         {
             var isBuiltInNullable = IsBuiltInNullableType(propertyInfo);
             if (isBuiltInNullable) return true;
-            var nullableAttribute = propertyInfo.GetAttributeSingleOrDefault("NullableAttribute");
-            return DoesNullableAttributeHaveMagicNullableByte(nullableAttribute);
+
+            var nullableAttribute    = propertyInfo.GetAttributeSingleOrDefault("NullableAttribute");
+            var hasMagicNullableByte = DoesNullableAttributeHaveMagicNullableByte(nullableAttribute);
+
+            if (hasMagicNullableByte) return true;
+
+            var declaringTypeHasNullableContextAttribute = propertyInfo
+                .DeclaringType
+                .GetAttributeSingleOrDefault("NullableContextAttribute");
+            if (declaringTypeHasNullableContextAttribute is null) throw new NotImplementedException();
+
+            return false;
         }
 
         private static bool IsBuiltInNullableType(MemberInfo memberInfo)
@@ -77,7 +201,7 @@ namespace Rogero.Common.ExtensionMethods
             var isNullableType = Nullable.GetUnderlyingType(type) != null;
             return isNullableType || type.HasNullableAttributeSetTo2();
         }
-        
+
         /// <summary>
         /// See https://codeblog.jonskeet.uk/2019/02/10/nullableattribute-and-c-8/ for an explanation.
         /// </summary>
@@ -94,8 +218,8 @@ namespace Rogero.Common.ExtensionMethods
              */
             var nullableAttribute2 = type.GetAttributeSingleOrDefault("NullableAttribute", true);
             if (nullableAttribute2 is null) return false;
-            
-            var flagsAttribute = nullableAttribute2.GetType().GetProperty("NullableFlags", BindingFlags.Instance 
+
+            var flagsAttribute = nullableAttribute2.GetType().GetProperty("NullableFlags", BindingFlags.Instance
                                                                         | BindingFlags.Public | BindingFlags.NonPublic);
             if (flagsAttribute is null) return false;
 
@@ -107,6 +231,30 @@ namespace Rogero.Common.ExtensionMethods
                 byte[] bytes when bytes[0] == 2 => true,
                 _                               => false
             };
+        }
+
+        private static int GetNullableContextAttributeValue(object nullableAttribute)
+        {
+            var nullableByteValue = nullableAttribute
+                .ObjNullMap(attribute => attribute.GetType().GetField("Flag", BindingFlags))
+                .ObjNullMap(flagsField => (object) (byte) flagsField.GetValue(nullableAttribute))
+                .ObjNullMatch(
+                    (byteValue => (byte) byteValue),
+                    () => (byte) 0);
+
+            return nullableByteValue;
+        }
+
+        private static int GetNullableAttributeValue(object nullableAttribute)
+        {
+            var nullableByteValue = nullableAttribute
+                .ObjNullMap(attribute => attribute.GetType().GetField("NullableFlags", BindingFlags))
+                .ObjNullMap(flagsField => flagsField.GetValue(nullableAttribute) as byte[])
+                .ObjNullMatch(
+                    (bytes => bytes[0]),
+                    () => 0);
+
+            return nullableByteValue;
         }
 
         private static bool DoesNullableAttributeHaveMagicNullableByte(object nullableAttribute)
