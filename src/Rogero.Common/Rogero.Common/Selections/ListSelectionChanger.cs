@@ -54,6 +54,11 @@ namespace Rogero.Common.Selections
 
         public static void MoveTo<T>(ObservableCollection<T> collection, ReactiveProperty<T> current, int index)
         {
+            if (collection.Count == 0)
+            {
+                //Collection is empty so do nothing.
+                return;
+            }
             CheckIndex(collection, index);
             current.Value = collection[index];
         }

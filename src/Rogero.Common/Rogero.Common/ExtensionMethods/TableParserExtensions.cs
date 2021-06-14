@@ -20,6 +20,8 @@ namespace Rogero.Common.ExtensionMethods
         }
         public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
         {
+            if (values == null || !values.Any()) return String.Empty;
+            
             var objectProperties = GetObjectProperties<T>(values, useTForProperties);
             var columnHeaders = new string[objectProperties.Length];
             var valueSelectors = new Func<T, object>[objectProperties.Length];
