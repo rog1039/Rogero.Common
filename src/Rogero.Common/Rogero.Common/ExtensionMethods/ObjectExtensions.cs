@@ -119,6 +119,15 @@ namespace Rogero.Common.ExtensionMethods
 
         //    }
         //}
+
+
+        #nullable  enable
+        public static T? TryCast<T>(this object o) where T: class
+        {
+            if (o is T t) return t;
+            return null;
+        }
+        #nullable disable
     }
     
     public enum ObjectTaskAnalysis{ Neither, Task, TaskOfT}

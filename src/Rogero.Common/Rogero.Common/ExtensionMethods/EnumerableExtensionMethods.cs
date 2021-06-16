@@ -75,6 +75,12 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
 
+        /// <summary>
+        /// An eager ForEach on an IEnumerable.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="action"></param>
+        /// <typeparam name="T"></typeparam>
         public static void MyForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
             foreach (var item in items)
