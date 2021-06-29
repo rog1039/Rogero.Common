@@ -34,10 +34,10 @@ namespace Rogero.Common.ExtensionMethods
             foreach (var item in list)
             {
                 var key = keyFunc(item);
-                if (dict.TryGetValue(key, out var val))
+                if (dict.TryGetValue(key, out var existingItem))
                 {
-                    var newVal = valueAggregationFunc(val, item);
-                    dict[key] = newVal;
+                    var combinedItem = valueAggregationFunc(existingItem, item);
+                    dict[key] = combinedItem;
                 }
                 else
                 {
