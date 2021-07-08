@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace Rogero.Common.ExtensionMethods
@@ -166,6 +167,11 @@ namespace Rogero.Common.ExtensionMethods
         public static string NamespaceToPath(this string text)
         {
             return text.Replace(".", "/");
+        }
+
+        public static void ToFile(this string text, string filePath)
+        {
+            File.WriteAllText(filePath, text);
         }
     }
 }

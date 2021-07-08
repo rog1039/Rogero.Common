@@ -10,13 +10,13 @@ namespace Rogero.Common.ExtensionMethods
 {
     public static class TableParserExtensions
     {
-        public static void PrintStringTable<T>(this IEnumerable<T> values, string tableTitle = null)
+        public static void PrintStringTable<T>(this IEnumerable<T> values, string tableTitle = null, int sampleCount = Int32.MaxValue)
         {
             if (tableTitle.IsNotNullOrWhitespace())
             {
-                Console.WriteLine(tableTitle + $"   ***Count: {values.Count()}");
+                Console.WriteLine(tableTitle + $"   ***Count: {values.Count()}, Sample: {sampleCount}");
             }
-            Console.WriteLine(values.ToStringTable());
+            Console.WriteLine(values.Take(sampleCount).ToStringTable());
         }
         public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
         {
