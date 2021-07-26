@@ -1,17 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29318.209
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31512.422
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.CommonFramework", "Rogero.CommonFramework\Rogero.CommonFramework.csproj", "{F129BCCC-A9C3-49D0-A039-4263320A3D8A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.CommonFramework.Tests", "Rogero.CommonFramework.Tests\Rogero.CommonFramework.Tests.csproj", "{874C63E3-7AD3-49C4-B18A-A5C964A016F0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\..\build\_build.csproj", "{AC559443-7C7C-4773-856B-2BBDCE142921}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common", "Rogero.Common\Rogero.Common.csproj", "{E021F576-11FD-4F2F-A29D-C9DF996157DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rogero.Common", "Rogero.Common\Rogero.Common.csproj", "{E021F576-11FD-4F2F-A29D-C9DF996157DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogero.Common.Tests", "Rogero.Common.Tests\Rogero.Common.Tests.csproj", "{C1DFC115-1D18-4389-821B-5BD1157152AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rogero.Common.Tests", "Rogero.Common.Tests\Rogero.Common.Tests.csproj", "{C1DFC115-1D18-4389-821B-5BD1157152AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F129BCCC-A9C3-49D0-A039-4263320A3D8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{874C63E3-7AD3-49C4-B18A-A5C964A016F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{874C63E3-7AD3-49C4-B18A-A5C964A016F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{874C63E3-7AD3-49C4-B18A-A5C964A016F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{874C63E3-7AD3-49C4-B18A-A5C964A016F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC559443-7C7C-4773-856B-2BBDCE142921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC559443-7C7C-4773-856B-2BBDCE142921}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E021F576-11FD-4F2F-A29D-C9DF996157DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

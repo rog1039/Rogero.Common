@@ -66,12 +66,6 @@
       <Version>2.4.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Rogero.CommonFramework\Rogero.CommonFramework.csproj">
-      <Project>{f129bccc-a9c3-49d0-a039-4263320a3d8a}</Project>
-      <Name>Rogero.CommonFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
