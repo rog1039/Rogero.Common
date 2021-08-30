@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,11 +35,11 @@ namespace Rogero.Common.ExtensionMethods
             }
         }
 
-        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> list)
+        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> list)
         {
             foreach (var item in list)
             {
-                if (item != null) yield return item;
+                if (item is not null) yield return item;
             }
         }
 

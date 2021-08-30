@@ -105,7 +105,7 @@ namespace Rogero.Common.ExtensionMethods
             throw new NotImplementedException();
         }
 
-        public static bool IsNullable(this MemberInfo memberInfo)
+        public static bool IsMemberNullable(this MemberInfo memberInfo)
         {
             var memberType  = GetMemberType(memberInfo);
             var isValueType = memberType.IsValueType;

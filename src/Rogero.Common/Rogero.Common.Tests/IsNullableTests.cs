@@ -19,12 +19,12 @@ namespace Rogero.Common.Tests
             var myClassIntNotNullable = myClassType.GetField(nameof(MyClass.IntNotNullable));
             var myClassIntNullable = myClassType.GetField(nameof(MyClass.IntNullable));
 
-            myClassObjectNotNull.IsNullable().Should().BeFalse();
-            myClassObjectNull.IsNullable().Should().BeTrue();
-            myClassStringNotNull.IsNullable().Should().BeFalse();
-            myClassStringNull.IsNullable().Should().BeTrue();
-            myClassIntNotNullable.IsNullable().Should().BeFalse();
-            myClassIntNullable.IsNullable().Should().BeTrue();
+            myClassObjectNotNull.IsMemberNullable().Should().BeFalse();
+            myClassObjectNull.IsMemberNullable().Should().BeTrue();
+            myClassStringNotNull.IsMemberNullable().Should().BeFalse();
+            myClassStringNull.IsMemberNullable().Should().BeTrue();
+            myClassIntNotNullable.IsMemberNullable().Should().BeFalse();
+            myClassIntNullable.IsMemberNullable().Should().BeTrue();
         }
 
         [Fact()]
@@ -35,8 +35,8 @@ namespace Rogero.Common.Tests
             var myClassIntNotNullable = myClassType.GetField(nameof(MyClass.IntNotNullable));
             var myClassIntNullable = myClassType.GetField(nameof(MyClass.IntNullable));
             
-            myClassIntNotNullable.IsNullable().Should().BeFalse();
-            myClassIntNullable.IsNullable().Should().BeTrue();
+            myClassIntNotNullable.IsMemberNullable().Should().BeFalse();
+            myClassIntNullable.IsMemberNullable().Should().BeTrue();
         } 
 
 
