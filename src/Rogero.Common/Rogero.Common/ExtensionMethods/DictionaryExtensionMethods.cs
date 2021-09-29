@@ -74,6 +74,24 @@ namespace Rogero.Common.ExtensionMethods
             return dict;
         }
 
+        public static Dictionary<K, T> ToDictionaryIgnoreDuplicates<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc)
+        {
+            var dict = new Dictionary<K, T>();
+            foreach (var item in list)
+            {
+                var key = keyFunc(item);
+                if (dict.TryGetValue(key, out var val))
+                {
+                    //Do nothing...
+                }
+                else
+                {
+                    dict.Add(key, item);
+                }
+            }
+            return dict;
+        }
+
 
         public static SortedDictionary<K, IList<V>> ToSortedDictionaryMany<T, K, V>(this IEnumerable<T> list,
             Func<T, K> keyFunc,
