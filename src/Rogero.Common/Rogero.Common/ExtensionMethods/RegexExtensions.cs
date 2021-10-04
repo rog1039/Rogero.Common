@@ -1,24 +1,29 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Rogero.Common.ExtensionMethods
 {
     public static class RegexExtensions
     {
-        private static readonly ConcurrentDictionary<string, Regex> RegexCache =
-            new ConcurrentDictionary<string, Regex>();
+        private static readonly ConcurrentDictionary<RegexId, Regex> RegexCache = new();
+            
 
-        private static Regex GetRegex(string regexPattern)
+        private record RegexId(string RegexPattern, RegexOptions RegexOptions);
+
+        private static Regex GetRegex(string regexPattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            if (RegexCache.TryGetValue(regexPattern, out var regex))
+            var regexId = new RegexId(regexPattern, regexOptions);
+            if (RegexCache.TryGetValue(regexId, out var regex))
             {
                 return regex;
             }
 
-            var newRegex = new Regex(regexPattern);
-            if (RegexCache.TryAdd(regexPattern, newRegex))
+            var newRegex = new Regex(regexPattern, regexOptions);
+            if (RegexCache.TryAdd(regexId, newRegex))
             {
                 //Here and in the return below, we don't care if the TryAdd succeeds.
                 //At the end of the day we just want a regex, so if the add fails because
@@ -29,9 +34,9 @@ namespace Rogero.Common.ExtensionMethods
             return newRegex;
         }
         
-        public static GroupCollection GetMatches(this string input, string regexPattern)
+        public static GroupCollection GetMatches(this string input, string regexPattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            var regex = GetRegex(regexPattern);
+            var regex = GetRegex(regexPattern, regexOptions);
             var matches = regex.Match(input);
             return matches.Groups;
         }
