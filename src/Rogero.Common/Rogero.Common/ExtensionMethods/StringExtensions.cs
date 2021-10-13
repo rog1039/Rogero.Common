@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Rogero.Common.ExtensionMethods
@@ -172,6 +173,12 @@ namespace Rogero.Common.ExtensionMethods
         public static void ToFile(this string text, string filePath)
         {
             File.WriteAllText(filePath, text);
+        }
+
+        public static bool ContainsAny(this string text, IEnumerable<string> parts)
+        {
+            var contains = parts.Any(part => text.Contains(part));
+            return contains;
         }
     }
 }
