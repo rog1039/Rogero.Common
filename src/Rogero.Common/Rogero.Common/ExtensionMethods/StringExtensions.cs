@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -87,7 +88,7 @@ namespace Rogero.Common.ExtensionMethods
             return string.IsNullOrWhiteSpace(s);
         }
 
-        public static bool IsNotNullOrWhitespace(this string s)
+        public static bool IsNotNullOrWhitespace([NotNullWhen(true)]this string  s)
         {
             return !string.IsNullOrWhiteSpace(s);
         }
