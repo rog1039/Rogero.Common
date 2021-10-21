@@ -83,7 +83,7 @@ namespace Rogero.Common.ExtensionMethods
             Debug.WriteLine(s);
         }
 
-        public static bool IsNullOrWhitespace(this string s)
+        public static bool IsNullOrWhitespace([NotNullWhen(false)] this string s)
         {
             return string.IsNullOrWhiteSpace(s);
         }
