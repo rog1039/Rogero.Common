@@ -1,4 +1,4 @@
-using System;
+namespace Rogero.Common.ExtensionMethods;
 
 public static class ArgumentValidationExtensions
 {

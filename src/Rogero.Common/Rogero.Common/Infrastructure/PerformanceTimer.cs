@@ -1,5 +1,3 @@
-using System;
-
 namespace Rogero.Common.Infrastructure;
 
 public static class PerformanceTimer

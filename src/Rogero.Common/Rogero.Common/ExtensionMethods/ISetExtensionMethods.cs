@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Rogero.Common.ExtensionMethods;
+﻿namespace Rogero.Common.ExtensionMethods;
 
 public static class SetExtensionMethods
 {

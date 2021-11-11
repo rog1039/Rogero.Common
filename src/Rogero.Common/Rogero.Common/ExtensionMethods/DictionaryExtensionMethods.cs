@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Optional.Collections;
+﻿using Optional.Collections;
 
 namespace Rogero.Common.ExtensionMethods;
 

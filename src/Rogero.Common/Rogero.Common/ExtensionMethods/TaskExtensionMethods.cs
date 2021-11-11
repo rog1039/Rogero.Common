@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Rogero.Common.ExtensionMethods;
 
 public static class TaskExtensionMethods

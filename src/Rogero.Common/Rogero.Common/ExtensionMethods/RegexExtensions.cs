@@ -1,9 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Rogero.Common.ExtensionMethods;
 

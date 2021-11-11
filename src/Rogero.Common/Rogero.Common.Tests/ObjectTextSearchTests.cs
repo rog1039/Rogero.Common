@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Rogero.Common.ExtensionMethods;
 using Rogero.Common.Infrastructure;
 using Xunit;
