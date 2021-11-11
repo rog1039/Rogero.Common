@@ -1,53 +1,52 @@
 using System;
 
-namespace Rogero.Common.Infrastructure
+namespace Rogero.Common.Infrastructure;
+
+public static class PerformanceTimer
 {
-    public static class PerformanceTimer
+    public static PerformanceTimerManager Start()
     {
-        public static PerformanceTimerManager Start()
+        return new PerformanceTimerManager();
+    }
+
+    public class PerformanceTimerManager : IDisposable
+    {
+        public DateTime StartTime          { get; set; }
+        public DateTime LastCheckpointTime { get; set; }
+            
+        private readonly Action<string> _loggerAction = Console.WriteLine;
+
+        public PerformanceTimerManager()
         {
-            return new PerformanceTimerManager();
+            StartTime = LastCheckpointTime = DateTime.UtcNow;
         }
 
-        public class PerformanceTimerManager : IDisposable
+        public PerformanceTimerManager(Action<string> customLoggerAction)
         {
-            public DateTime StartTime { get; set; }
-            public DateTime LastCheckpointTime { get; set; }
-            
-            private readonly Action<string> _loggerAction = Console.WriteLine;
+            StartTime     = LastCheckpointTime = DateTime.UtcNow;
+            _loggerAction = customLoggerAction;
+        }
 
-            public PerformanceTimerManager()
-            {
-                StartTime = LastCheckpointTime = DateTime.UtcNow;
-            }
+        public void Checkpoint(string checkpointName)
+        {
+            var now                        = DateTime.UtcNow;
+            var totalElapsed               = now - StartTime;
+            var elapsedSinceLastCheckpoint = now - LastCheckpointTime;
+            LastCheckpointTime = now;
+            _loggerAction($"{checkpointName}: {totalElapsed.TotalMilliseconds} [{elapsedSinceLastCheckpoint.TotalMilliseconds}]");
+        }
 
-            public PerformanceTimerManager(Action<string> customLoggerAction)
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                StartTime = LastCheckpointTime = DateTime.UtcNow;
-                _loggerAction = customLoggerAction;
+                Checkpoint("Finished");
             }
+        }
 
-            public void Checkpoint(string checkpointName)
-            {
-                var now = DateTime.UtcNow;
-                var totalElapsed = now - StartTime;
-                var elapsedSinceLastCheckpoint = now - LastCheckpointTime;
-                LastCheckpointTime = now;
-                _loggerAction($"{checkpointName}: {totalElapsed.TotalMilliseconds} [{elapsedSinceLastCheckpoint.TotalMilliseconds}]");
-            }
-
-            protected virtual void Dispose(bool disposing)
-            {
-                if (disposing)
-                {
-                    Checkpoint("Finished");
-                }
-            }
-
-            public void Dispose()
-            {
-                Dispose(true);
-            }
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

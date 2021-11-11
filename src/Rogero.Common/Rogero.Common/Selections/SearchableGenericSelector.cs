@@ -11,74 +11,73 @@ using Rogero.Common.ExtensionMethods;
 using Rogero.Common.Infrastructure;
 
 
-namespace Rogero.Common.Selections
+namespace Rogero.Common.Selections;
+
+public class SearchableGenericSelector<T> : GenericSelector<T>
 {
-    public class SearchableGenericSelector<T> : GenericSelector<T>
+    public ReactiveProperty<string> SearchText { get; } = new ReactiveProperty<string>();
+    /// <summary>
+    /// The ObservableCollection containing the items after the search is performed.
+    /// </summary>
+    public ObservableCollection<T> ItemSource { get; } = new ObservableCollection<T>();
+
+    private readonly TimeSpan       _searchThrottleDelay;
+    private readonly PropertyInfo[] _itemTypeProperties = typeof(T).GetProperties();
+
+    public SearchableGenericSelector(TimeSpan searchThrottleDelay = default(TimeSpan))
     {
-        public ReactiveProperty<string> SearchText { get; } = new ReactiveProperty<string>();
-        /// <summary>
-        /// The ObservableCollection containing the items after the search is performed.
-        /// </summary>
-        public ObservableCollection<T> ItemSource { get; } = new ObservableCollection<T>();
+        _searchThrottleDelay = searchThrottleDelay == default(TimeSpan)
+            ? TimeSpan.FromMilliseconds(250)
+            : searchThrottleDelay;
+        SearchText
+            .Throttle(_searchThrottleDelay)
+            .ObserveOnUIDispatcher()
+            .Subscribe(SearchTextChanged);
 
-        private readonly TimeSpan _searchThrottleDelay;
-        private readonly PropertyInfo[] _itemTypeProperties = typeof(T).GetProperties();
+        //Listen for changes on the Items collection and update ItemsSource as needed.
+        var ItemsChangedObservable =
+            Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                eh => Items.CollectionChanged += eh,
+                eh => Items.CollectionChanged -= eh);
 
-        public SearchableGenericSelector(TimeSpan searchThrottleDelay = default(TimeSpan))
-        {
-            _searchThrottleDelay = searchThrottleDelay == default(TimeSpan)
-                ? TimeSpan.FromMilliseconds(250)
-                : searchThrottleDelay;
-            SearchText
-                .Throttle(_searchThrottleDelay)
-                .ObserveOnUIDispatcher()
-                .Subscribe(SearchTextChanged);
+        ItemsChangedObservable
+            .Throttle(TimeSpan.FromMilliseconds(200))
+            .ObserveOnUIDispatcher()
+            .Subscribe(z => SearchTextChanged(SearchText.Value));
+    }
 
-            //Listen for changes on the Items collection and update ItemsSource as needed.
-            var ItemsChangedObservable =
-                Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                    eh => Items.CollectionChanged += eh,
-                    eh => Items.CollectionChanged -= eh);
+    public void AddNewItem(T item)
+    {
+        Items.Add(item);
+        ItemSource.Add(item);
+    }
 
-            ItemsChangedObservable
-                .Throttle(TimeSpan.FromMilliseconds(200))
-                .ObserveOnUIDispatcher()
-                .Subscribe(z => SearchTextChanged(SearchText.Value));
-        }
+    protected virtual void SearchTextChanged(string searchText)
+    {
+        var selected = SelectedItem.Value;
 
-        public void AddNewItem(T item)
-        {
-            Items.Add(item);
-            ItemSource.Add(item);
-        }
+        var matchingItems = GetSearchResults(searchText);
 
-        protected virtual void SearchTextChanged(string searchText)
-        {
-            var selected = SelectedItem.Value;
+        matchingItems.ReplaceObservableCollectionItems(ItemSource);
+        var newSelected = Items.FirstOrDefault(z => z.Equals(selected));
+        SelectedItem.Value = newSelected;
+    }
 
-            var matchingItems = GetSearchResults(searchText);
+    protected virtual IEnumerable<T> GetSearchResults(string searchText)
+    {
+        var matchingItems = ObjectTextSearcher.FindMatches(Items, searchText);
+        return matchingItems;
+    }
 
-            matchingItems.ReplaceObservableCollectionItems(ItemSource);
-            var newSelected = Items.FirstOrDefault(z => z.Equals(selected));
-            SelectedItem.Value = newSelected;
-        }
+    public override void ReplaceItemSource(IEnumerable<T> records)
+    {
+        records.ReplaceObservableCollectionItems(Items);
+        SearchTextChanged(SearchText.Value);
+    }
 
-        protected virtual IEnumerable<T> GetSearchResults(string searchText)
-        {
-            var matchingItems = ObjectTextSearcher.FindMatches(Items, searchText);
-            return matchingItems;
-        }
-
-        public override void ReplaceItemSource(IEnumerable<T> records)
-        {
-            records.ReplaceObservableCollectionItems(Items);
-            SearchTextChanged(SearchText.Value);
-        }
-
-        public override void ClearItems()
-        {
-            base.ClearItems();
-            SearchTextChanged(SearchText.Value);
-        }
+    public override void ClearItems()
+    {
+        base.ClearItems();
+        SearchTextChanged(SearchText.Value);
     }
 }
