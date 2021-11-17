@@ -113,7 +113,7 @@ public static class NullableTypeExtensionMethods
              * If the type is a value type, and it is not wrapped in a nullable type, then it must be
              * non-nullable. The nullable attribute code below only applies to non-value type types.
              */
-            var isBuiltInNullable = IsBuiltInNullableType(memberInfo);
+            var isBuiltInNullable = IsNullableOfT(memberInfo);
             return isBuiltInNullable;
         }
 
@@ -161,13 +161,13 @@ public static class NullableTypeExtensionMethods
             //2 is nullable
             2 => true,
             //Should never get here... since the 0,1,2 should be all possible cases above.
-            _ => false
+            _ => throw new ArgumentException(nameof(nullableContextValue), $"Expected 0, 1, or 2; {nullableContextValue} was unexpected."),
         };
     }
 
     public static bool IsNullable2(this MemberInfo propertyInfo)
     {
-        var isBuiltInNullable = IsBuiltInNullableType(propertyInfo);
+        var isBuiltInNullable = IsNullableOfT(propertyInfo);
         if (isBuiltInNullable) return true;
 
         var nullableAttribute    = propertyInfo.GetAttributeSingleOrDefault("NullableAttribute");
@@ -183,13 +183,19 @@ public static class NullableTypeExtensionMethods
         return false;
     }
 
-    private static bool IsBuiltInNullableType(MemberInfo memberInfo)
+    /// <summary>
+    /// Is the member have the type: Nullable<T>?
+    /// </summary>
+    /// <param name="memberInfo"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    private static bool IsNullableOfT(MemberInfo memberInfo)
     {
         return memberInfo switch
         {
-            FieldInfo fieldInfo        => fieldInfo.FieldType.IsNullable(),
-            MethodInfo methodInfo      => methodInfo.ReturnType.IsNullable(),
-            PropertyInfo propertyInfo1 => propertyInfo1.PropertyType.IsNullable(),
+            FieldInfo fieldInfo        => fieldInfo.FieldType.IsNullableOfT(),
+            MethodInfo methodInfo      => methodInfo.ReturnType.IsNullableOfT(),
+            PropertyInfo propertyInfo1 => propertyInfo1.PropertyType.IsNullableOfT(),
             _                          => throw new ArgumentOutOfRangeException(nameof(memberInfo))
         };
     }
@@ -231,6 +237,11 @@ public static class NullableTypeExtensionMethods
         };
     }
 
+    /// <summary>
+    /// Returns 0 if the Flag field is not present, otherwise, returns the value.
+    /// </summary>
+    /// <param name="nullableAttribute"></param>
+    /// <returns></returns>
     private static int GetNullableContextAttributeValue(object nullableAttribute)
     {
         var nullableByteValue = nullableAttribute
@@ -243,6 +254,12 @@ public static class NullableTypeExtensionMethods
         return nullableByteValue;
     }
 
+    /// <summary>
+    /// Returns 0 if the nullable attribute is not present, otherwise, returns the value of the nullable attribute.
+    /// NullableFlags contains a byte[].
+    /// </summary>
+    /// <param name="nullableAttribute"></param>
+    /// <returns></returns>
     private static int GetNullableAttributeValue(object nullableAttribute)
     {
         var nullableByteValue = nullableAttribute
@@ -257,13 +274,26 @@ public static class NullableTypeExtensionMethods
 
     private static bool DoesNullableAttributeHaveMagicNullableByte(object nullableAttribute)
     {
-        var isNullable = nullableAttribute
-            .ObjNullMap(attribute => attribute.GetType().GetField("NullableFlags", BindingFlags))
-            .ObjNullMap(flagsField => flagsField.GetValue(nullableAttribute) as byte[])
-            .ObjNullMatch(
-                (bytes => bytes[0] == MagicNullableByteValue),
-                () => false);
+        var nullableAttributeValue = GetNullableAttributeValue(nullableAttribute);
+        return nullableAttributeValue == MagicNullableByteValue;
+    }
 
+    /// <summary>
+    /// If the type is Nullable<T>, return T, otherwise return the type itself.
+    /// Unwraps a Nullable<T> if you will.
+    /// </summary>
+    /// <param name="propertyType"></param>
+    /// <returns></returns>
+    public static Type UnwrapNullable(this Type propertyType)
+    {
+        return Nullable.GetUnderlyingType(propertyType) is { } type 
+            ? type 
+            : propertyType;
+    }
+    
+    public static bool IsNullableOfT(this Type type)
+    {
+        var isNullable = Nullable.GetUnderlyingType(type) != null;
         return isNullable;
     }
 }

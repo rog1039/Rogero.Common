@@ -1,18 +1,50 @@
 ﻿using System.Reflection;
+using Microsoft.Identity.Client;
 
 namespace Rogero.Common.ExtensionMethods;
 
 public static class TypeExtensionMethod
 {
+    public static bool Implements(this Type t, Type otherType)
+    {
+        if (t == null) return false;
+        if (otherType == null) return false;
+
+        var interfaces          = t.GetInterfaces();
+        var implementsInterface = interfaces.Any(i => i.AssemblyQualifiedName == otherType.AssemblyQualifiedName);
+        if (implementsInterface) return true;
+
+        if (t.IsInterface == false)
+        {
+            return t.GetBaseTypesIncludingSelf().Any(z => z == otherType);
+        }
+
+        return false;
+    }
+
+    public static IEnumerable<Type> GetBaseTypesIncludingSelf(this Type type)
+    {
+        if (type.IsInterface) throw new Exception("Cannot get base types of an interface.");
+        
+        while (true)
+        {
+            if(type == null) yield break;
+            
+            yield return type;
+            
+            type = type.BaseType;
+        }
+    }
+
     public static bool ImplementsInterface<T>(this Type t)
     {
         if (t == null) return false;
-            
+
         var interfaces          = t.GetInterfaces();
         var implementsInterface = interfaces.Any(i => i.AssemblyQualifiedName == typeof(T).AssemblyQualifiedName);
         return implementsInterface;
     }
-        
+
     public static object GetAttributeSingleOrDefault(this Type type, string attributeName,
                                                      bool      inheritBaseAttributes = false)
     {
@@ -55,13 +87,13 @@ public static class TypeExtensionMethod
             .Single(z => z.GetType() == typeof(T));
         return (T) attribute;
     }
-        
+
     public static T GetSingleAttributeIncludingFromInterfaces<T>(this Type type)
     {
         var typeAttributes = type
             .GetCustomAttributes(true)
             .WhereCastTo<T>();
-            
+
         var interfaces = type.GetInterfaces();
         var attributes = interfaces
             .SelectMany(z => z.GetCustomAttributes(true))
@@ -75,7 +107,7 @@ public static class TypeExtensionMethod
     {
         var types = new List<Type>();
 
-        var queue = new Queue<Type>(){};
+        var queue = new Queue<Type>() { };
         queue.Enqueue(type);
         while (queue.Count > 0)
         {
@@ -87,7 +119,7 @@ public static class TypeExtensionMethod
 
         return types.Distinct().ToList();
     }
-        
+
     public static string ToClosedTypeName(this Type type)
     {
         if (!type.IsGenericType) return type.Name;
@@ -102,7 +134,7 @@ public static class TypeExtensionMethod
         var nonSuffixedTypeName = type
             .GetGenericTypeDefinition()
             .Name[..^suffixLength];
-            
+
         return $"{nonSuffixedTypeName}<{genericText}>";
     }
 
@@ -112,7 +144,5 @@ public static class TypeExtensionMethod
         return type.GetGenericTypeDefinition() == genericType;
     }
 
-    static TypeExtensionMethod()
-    {
-    }
+    static TypeExtensionMethod() { }
 }

@@ -7,18 +7,26 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class TableParserExtensions
 {
-    public static void PrintStringTable<T>(this IEnumerable<T> values, string tableTitle = null, int sampleCount = Int32.MaxValue)
+    public static void PrintStringTable<T>(this IEnumerable<T> values, 
+                                           string tableTitle = null, 
+                                           int sampleCount = Int32.MaxValue)
     {
         if (tableTitle.IsNotNullOrWhitespace())
         {
-            Console.WriteLine(tableTitle + $"   ***Count: {values.Count()}, Sample: {sampleCount}");
+            Console.WriteLine(new string('=', 350));
+            var datasourceRowCount   = values.Count();
+            var tableHeader = $"{tableTitle} |";
+            var sampleSection = datasourceRowCount > sampleCount
+                ? $" Sampling {sampleCount}/{datasourceRowCount} rows"
+                : $" Showing all {datasourceRowCount} rows";
+            Console.WriteLine(tableHeader + sampleSection);
         }
         Console.WriteLine(values.Take(sampleCount).ToStringTable());
     }
     public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
     {
         if (values == null || !values.Any()) return String.Empty;
-            
+
         var objectProperties = GetObjectProperties<T>(values, useTForProperties);
         var columnHeaders    = new string[objectProperties.Length];
         var valueSelectors   = new Func<T, object>[objectProperties.Length];
@@ -64,6 +72,8 @@ public static class TableParserExtensions
         } while (iteratingType != null);
 
         var props = type.GetProperties()
+            .Where(prop => prop.CanRead)
+            .Where(prop => !prop.GetMethod.IsStatic)
             .OrderBy(x => orderList.IndexOf(x.DeclaringType))
             .ToArray();
 
