@@ -6,6 +6,17 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class StringExtensions
 {
+    public static string AppendLine(this string input, string newText)
+    {
+        return input + Environment.NewLine + newText;
+    }
+
+    public static string ValueOr(this string input, string otherText)
+    {
+        return input.IsNullOrWhitespace() 
+            ? otherText 
+            : input;
+    }
     public static string Bracketize(this string input)
     {
         return "[" + input + "]";
