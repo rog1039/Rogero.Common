@@ -11,18 +11,29 @@ public static class TableParserExtensions
                                            string tableTitle = null, 
                                            int sampleCount = Int32.MaxValue)
     {
+        Console.WriteLine(ToStringTable(values, tableTitle, sampleCount));
+    }
+
+    public static string ToStringTable<T>(this IEnumerable<T> values, 
+                                          string tableTitle = null, 
+                                          int sampleCount = Int32.MaxValue)
+    {
+        var sb = new StringBuilder();
         if (tableTitle.IsNotNullOrWhitespace())
         {
-            Console.WriteLine(new string('=', 350));
+            sb.AppendLine(new string('=', 350));
             var datasourceRowCount   = values.Count();
             var tableHeader = $"{tableTitle} |";
             var sampleSection = datasourceRowCount > sampleCount
                 ? $" Sampling {sampleCount}/{datasourceRowCount} rows"
                 : $" Showing all {datasourceRowCount} rows";
-            Console.WriteLine(tableHeader + sampleSection);
+            sb.AppendLine(tableHeader + sampleSection);
         }
-        Console.WriteLine(values.Take(sampleCount).ToStringTable());
+        sb.AppendLine(values.Take(sampleCount).ToStringTable(useTForProperties:false));
+
+        return sb.ToString();
     }
+
     public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
     {
         if (values == null || !values.Any()) return String.Empty;
