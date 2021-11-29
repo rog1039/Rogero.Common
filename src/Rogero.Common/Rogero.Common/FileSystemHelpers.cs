@@ -35,15 +35,24 @@ public static class FileSystemHelpers
     public static async Task CopyFileAsync(string sourceFile, string destinationFile, CancellationToken cancellationToken)
     {
         var fileOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
-        var bufferSize  = 4096;
+        
+        /*
+         * Used unit testing to check different buffer sizes.
+         * 4096 performed about 150mbit/sec
+         * 4096*16 performed about 900 mbit/sec
+         * 4096*32 performed about 1200 mbit/sec
+         * 4096*48 performed about 1020 mbit/sec
+         * 4096*64 performed about 1000 mbit/sec
+         */
+        var bufferSize  = 4096*32;
 
-        using (var sourceStream = 
-               new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, fileOptions))
-
-        using (var destinationStream = 
-               new FileStream(destinationFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, bufferSize, fileOptions))
-
-            await sourceStream.CopyToAsync(destinationStream, bufferSize, cancellationToken)
-                .ConfigureAwait(continueOnCapturedContext: false);
+        await using var sourceStream = 
+            new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, fileOptions);
+        await using var destinationStream = 
+            new FileStream(destinationFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, bufferSize, fileOptions);
+        
+        await sourceStream
+            .CopyToAsync(destinationStream, bufferSize, cancellationToken)
+            .ConfigureAwait(continueOnCapturedContext: false);
     }
 }
