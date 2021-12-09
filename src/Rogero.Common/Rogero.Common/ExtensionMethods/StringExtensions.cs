@@ -188,4 +188,12 @@ public static class StringExtensions
         var contains = parts.Any(part => text.Contains(part));
         return contains;
     }
+
+    public static string ToSingleLine(this string text)
+    {
+        text = text.Replace("\r\n", "\\r\\n");
+        text = text.Replace("\r", "\\r");
+        text = text.Replace("\n", "\\n");
+        return text;
+    }
 }
