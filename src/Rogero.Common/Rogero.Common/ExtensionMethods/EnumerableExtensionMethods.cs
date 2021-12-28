@@ -86,4 +86,25 @@ public static class EnumerableExtensionMethods
             action(item);
         }
     }
+
+    public static IEnumerable<T> Distinct<T,TKey>(this IEnumerable<T> items, Func<T,TKey> selector)
+    {
+        HashSet<TKey> uniqueItems = new();
+        foreach (var item in items)
+        {
+            var key = selector(item);
+            if (uniqueItems.Add(key))
+                yield return item;
+        }
+    }
+
+    public static IEnumerable<T> Do<T>(this IEnumerable<T> items, Action<T> action)
+    {
+        foreach (var item in items)
+        {
+            action(item);
+            yield return item;
+        }
+    }
+    
 }
