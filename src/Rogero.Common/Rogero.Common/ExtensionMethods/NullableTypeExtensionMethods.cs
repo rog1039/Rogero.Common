@@ -48,7 +48,7 @@ public static class NullableTypeExtensionMethods
         var isNullable = nullableAttribute
             .ObjNullMap(attribute => attribute.GetType().GetField("NullableFlags", BindingFlags))
             .ObjNullMap(flagsProp => flagsProp.GetValue(nullableAttribute) as byte[])
-            .ObjNullMatch(
+            .ObjNullMap(
                 bytes => bytes,
                 () => new byte[0]);
         return isNullable;
@@ -247,7 +247,7 @@ public static class NullableTypeExtensionMethods
         var nullableByteValue = nullableAttribute
             .ObjNullMap(attribute => attribute.GetType().GetField("Flag", BindingFlags))
             .ObjNullMap(flagsField => (object) (byte) flagsField.GetValue(nullableAttribute))
-            .ObjNullMatch(
+            .ObjNullMap(
                 (byteValue => (byte) byteValue),
                 () => (byte) 0);
 
@@ -265,7 +265,7 @@ public static class NullableTypeExtensionMethods
         var nullableByteValue = nullableAttribute
             .ObjNullMap(attribute => attribute.GetType().GetField("NullableFlags", BindingFlags))
             .ObjNullMap(flagsField => flagsField.GetValue(nullableAttribute) as byte[])
-            .ObjNullMatch(
+            .ObjNullMap(
                 (bytes => bytes[0]),
                 () => 0);
 

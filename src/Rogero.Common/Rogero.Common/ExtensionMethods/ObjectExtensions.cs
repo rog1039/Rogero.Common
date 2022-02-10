@@ -41,7 +41,7 @@ public static class ObjectExtensions
         return null;
     }
 
-    public static TReturn ObjNullMatch<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
+    public static TReturn ObjNullMap<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
     {
         if (obj is not null)
         {
@@ -57,6 +57,17 @@ public static class ObjectExtensions
         if (obj is not null)
         {
             some(obj!);
+        }
+    }
+    public static void ObjNullMatch<T>(this T obj, Action<T> some, Action none)
+    {
+        if (obj is not null)
+        {
+            some(obj!);
+        }
+        else
+        {
+            none();
         }
     }
 #nullable disable
