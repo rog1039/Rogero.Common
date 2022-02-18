@@ -5,10 +5,12 @@ namespace Rogero.Common;
 
 public static class FileSystemHelpers
 {
-    public static Option<FileInfo> FindFileUpwards(string fileName, int upwardIterationLimit)
+    public static Option<FileInfo> FindFileUpwards(string fileName, int upwardIterationLimit,
+                                                   string startingDirectory = null)
     {
-        var executingAssemblyPath = Assembly.GetExecutingAssembly().Location;
-        var startingDirectory     = Path.GetDirectoryName(executingAssemblyPath);
+        startingDirectory ??= Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+        // var executingAssemblyPath = Assembly.GetCallingAssembly().Location;
+        // var startingDirectory     = Path.GetDirectoryName(executingAssemblyPath);
         return FindFileUpwards(startingDirectory, fileName, upwardIterationLimit);
     }
         
