@@ -1,4 +1,5 @@
-﻿using Optional;
+﻿#nullable enable
+using Optional;
 
 namespace Rogero.Common.ExtensionMethods;
 
@@ -41,14 +42,11 @@ public static class ObjectExtensions
         return null;
     }
 
-    public static TReturn ObjNullMap<T, TReturn>(this T obj, Func<T, TReturn> some, Func<TReturn> none)
+    public static TReturn ObjNullMap<T, TReturn>(this T? obj, Func<T, TReturn> some, Func<TReturn> none)
     {
-        if (obj is not null)
-        {
-            return some(obj);
-        }
-
-        return none();
+        return obj is not null 
+            ? some(obj) 
+            : none();
     }
         
 #nullable enable
