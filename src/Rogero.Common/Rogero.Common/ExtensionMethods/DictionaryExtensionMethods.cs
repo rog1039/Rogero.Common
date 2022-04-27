@@ -85,7 +85,8 @@ public static class DictionaryExtensionMethods
       return dict;
    }
 
-   public static Dictionary<K, T> ToDictionaryAggregate<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc,
+   public static Dictionary<K, T> ToDictionaryAggregate<T, K>(this IEnumerable<T> list,
+                                                              Func<T, K>          keyFunc,
                                                               Func<T, T, T>       valueAggregationFunc)
    {
       var dict = new Dictionary<K, T>();
