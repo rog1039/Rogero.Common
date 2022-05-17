@@ -30,12 +30,12 @@ public static class ListExtensionMethods
 
     public static IList<T> MakeList<T>(this T item)
     {
-        return new List<T>() { item };
+        return new List<T> { item };
     }
 
     public static List<T> MakeConcreteList<T>(this T item)
     {
-        return new List<T>() { item };
+        return new List<T> { item };
     }
 
     public static IList<T> GetFirstOfGroup<T, TGroup, TSort>(this IEnumerable<T> list,       Func<T, TGroup> groupByFunc,
