@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -90,7 +91,7 @@ public static class StringExtensions
         Debug.WriteLine(s);
     }
 
-    public static bool IsNullOrWhitespace([NotNullWhen(false)] this string s)
+    public static bool IsNullOrWhitespace([NotNullWhen(false)] this string? s)
     {
         return string.IsNullOrWhiteSpace(s);
     }
