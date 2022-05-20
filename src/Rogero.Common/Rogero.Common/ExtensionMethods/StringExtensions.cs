@@ -197,4 +197,14 @@ public static class StringExtensions
         text = text.Replace("\n", "\\n");
         return text;
     }
+
+    public static bool StartsWithInsensitive(this string text, string startsWith)
+    {
+        return text.StartsWith(startsWith, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    public static string[] SplitOn(this string text, params char[] splitChar)
+    {
+        return text.Split(splitChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    }
 }
