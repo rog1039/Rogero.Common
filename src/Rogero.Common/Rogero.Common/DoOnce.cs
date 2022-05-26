@@ -33,10 +33,7 @@ public class DoOnce
     /// <returns></returns>
     private bool ShouldDo()
     {
-        if (Interlocked.Exchange(ref _isDone, 1) == 0)
-            return true;
-        else
-            return false;
+       return Interlocked.Exchange(ref _isDone, 1) == 0;
     }
 
     private void PerformAction(Action action, bool resetOnException)

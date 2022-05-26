@@ -118,6 +118,12 @@ public static class StringExtensions
         return string.Join(separator, list);
     }
 
+    private static string SeparatorCommaNewLine = ", " + Environment.NewLine;
+    public static string StringJoinCommaNewLine(this IEnumerable<string> list)
+    {
+        return string.Join(SeparatorCommaNewLine, list);
+    }
+
     public static string EscapeString(this string s)
     {
         return s
@@ -203,6 +209,17 @@ public static class StringExtensions
         return text.StartsWith(startsWith, StringComparison.CurrentCultureIgnoreCase);
     }
 
+    /// <summary>
+    /// Splits on comma, new lines, or pipes.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="splitChar"></param>
+    /// <returns></returns>
+    public static string[] SplitOnDefault(this string text)
+    {
+        char[] splitChars = {',', '\r', '\n', '|'};
+        return text.Split(splitChars, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    }
     public static string[] SplitOn(this string text, params char[] splitChar)
     {
         return text.Split(splitChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
