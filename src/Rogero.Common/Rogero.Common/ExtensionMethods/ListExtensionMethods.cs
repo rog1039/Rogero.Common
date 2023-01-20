@@ -169,6 +169,37 @@ public static class ListExtensionMethods
             list.Remove(item);
         }
     }
+
+    public static IList<T> Sample<T>(this IList<T> input, int sampleSize)
+    {
+       if (sampleSize <= 0) throw new Exception($"Sample size, {sampleSize}, must be greater than 0.");
+       
+       if (sampleSize >= input.Count)
+          throw new Exception($"Requested {sampleSize} which is greater than number of elements in provided list {input.Count}");
+       
+       var     random      = new Random();
+       var     seenIndices = new HashSet<int>();
+       List<T> resultSet   = new();
+
+       while (resultSet.Count < sampleSize)
+       {
+          var index = random.Next(0, input.Count);
+          if(seenIndices.Add(index))
+             resultSet.Add(input[index]);
+       }
+
+       return resultSet;
+    }
+
+    /// <summary>
+    /// Shuffles a list.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public static void Shuffle<T>(this IList<T> input)
+    {
+       throw new NotImplementedException("Should implement the Fisher-Yates shuffle with Durstenfeld's update: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle");
+    }
 }
 
 public enum SortOrder

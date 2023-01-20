@@ -32,6 +32,16 @@ public static class EnumerableExtensionMethods
         }
     }
 
+    public static IEnumerable<TReturn> SelectWhereNotNull<T, TReturn>(this IEnumerable<T?> list,
+                                                                      Func<T?, TReturn?>   selector)
+    {
+        foreach (var item in list)
+        {
+            var newItem = selector(item);
+            if (newItem is not null) yield return newItem;
+        }
+    }
+
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> list)
     {
         foreach (var item in list)

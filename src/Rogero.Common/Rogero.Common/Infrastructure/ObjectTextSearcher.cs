@@ -184,7 +184,7 @@ public class SearchTerm
     public static IList<SearchTerm> ExtractAllTerms(string searchText)
     {
         var searchTerms = searchText
-            .Split(' ')
+            .Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .Select(ExtractOneTerm)
             .ToList();
         return searchTerms;

@@ -92,13 +92,15 @@ public static class TableParserExtensions
       return props;
    }
 
-   public static string ToStringTable<T>(this   IEnumerable<T>    values, string[] columnHeaders,
+   public static string ToStringTable<T>(this IEnumerable<T>      values,
+                                         string[]                 columnHeaders,
                                          params Func<T, object>[] valueSelectors)
    {
       return ToStringTable(values.ToArray(), columnHeaders, valueSelectors);
    }
 
-   public static string ToStringTable<T>(this   T[]               values, string[] columnHeaders,
+   public static string ToStringTable<T>(this T[]                 values,
+                                         string[]                 columnHeaders,
                                          params Func<T, object>[] valueSelectors)
    {
       Debug.Assert(columnHeaders.Length == valueSelectors.Length);
@@ -127,7 +129,17 @@ public static class TableParserExtensions
                }
                default:
                {
-                  arrValues[rowIndex, colIndex] = value != null ? value.ToString() : "null";
+                  var val = value != null ? value.ToString() : "null";
+
+                  val                           = val.Replace("System.Collections.Generic.List`1", "List<>");
+                  if (val.StartsWith("List<>"))
+                  {
+                     var inner    = val.Substring(7, val.Length - 8);
+                     var typeName = inner.SplitOn('.').Last();
+                     val = $"List<{typeName}>";
+                  }
+                  
+                  arrValues[rowIndex, colIndex] = val;
                   break;
                }
             }
