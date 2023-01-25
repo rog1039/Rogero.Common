@@ -136,7 +136,7 @@ public static class StringExtensions
         var isFirst              = true;
         var sb                   = new StringBuilder();
         var hasTrailingSeparator = false;
-        foreach (var piece in pieces)
+        foreach (var piece in pieces.Where(x => x.IsNotNullOrWhitespace()))
         {
             if (isFirst)
             {
