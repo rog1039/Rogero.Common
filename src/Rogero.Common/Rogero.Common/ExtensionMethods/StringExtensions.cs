@@ -44,7 +44,7 @@ public static class StringExtensions
         }
         return sb.ToString();
     }
-    public static bool InsensitiveEquals(this string s1, string s2)
+    public static bool InsensitiveEquals(this string? s1, string s2)
     {
         var oneIsNullOtherIsnt = (s1 == null && s2 != null) || (s1 != null && s2 == null);
         if (oneIsNullOtherIsnt)
@@ -57,10 +57,10 @@ public static class StringExtensions
         return s1.Length == s2.Length && s1.IndexOf(s2, StringComparison.InvariantCultureIgnoreCase) == 0;
     }
 
-    public static bool InsensitiveContains(this string input, string part)
+    public static bool InsensitiveContains(this string? input, string? part)
     {
         if (part == null || input == null) return false;
-        return input.IndexOf(part, StringComparison.OrdinalIgnoreCase) >= 0;
+        return input.Contains(part, StringComparison.OrdinalIgnoreCase);
         //return CultureInfo.InvariantCulture.CompareInfo.IndexOf(input, part, CompareOptions.IgnoreCase) >= 0;
     }
 
