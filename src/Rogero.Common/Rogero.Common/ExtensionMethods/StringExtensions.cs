@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Rogero.Common.ExtensionMethods;
 
@@ -223,5 +224,21 @@ public static class StringExtensions
     public static string[] SplitOn(this string text, params char[] splitChar)
     {
         return text.Split(splitChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    /// <summary>
+    /// Takes a number like 1,200,300 and returns 1 200 300
+    /// </summary>
+    /// <param name="lot"></param>
+    /// <returns></returns>
+    public static string Format7DigitNumber(this string lot)
+    {
+       if(lot.IsNullOrWhitespace()) return String.Empty;
+       
+      var lotFormatted = Regex.Replace(lot, @"(\d{1})(\d{3})(\d{3})", "$1 $2 $3");
+
+      if (lotFormatted.IsNullOrWhitespace()) return lot;
+      
+      return lotFormatted;
     }
 }

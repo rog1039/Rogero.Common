@@ -29,9 +29,9 @@ public static class ObjectExtensions
         return true;
     }
 
-    public static bool IsNotNull(this object o)
+    public static bool IsNotNull(this object? o)
     {
-        return !(o is null);
+        return o is not null;
     }
 
     public static TReturn ObjNullMap<T, TReturn>(this T obj, Func<T, TReturn> func)

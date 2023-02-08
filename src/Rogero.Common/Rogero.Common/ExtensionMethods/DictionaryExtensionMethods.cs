@@ -1,6 +1,9 @@
 ﻿using Optional.Collections;
+using Optional.Unsafe;
 
 namespace Rogero.Common.ExtensionMethods;
+
+#nullable enable
 
 public static class DictionaryExtensionMethods
 {
@@ -212,6 +215,19 @@ public static class DictionaryExtensionMethods
       }
 
       return DictionaryResult<TValue>.NotFound();
+   }
+
+   public static TValue? GetValueOr<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue? orValue) where TValue : struct
+   {
+      var val = dict.GetValueOrNone(key);
+      if (val.HasValue) return val.ValueOrFailure();
+      return orValue;
+   }
+   public static TValue? GetValueOr<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue? orValue) where TValue : class
+   {
+      var val = dict.GetValueOrNone(key);
+      if (val.HasValue) return val.ValueOrFailure();
+      return orValue;
    }
 }
 
