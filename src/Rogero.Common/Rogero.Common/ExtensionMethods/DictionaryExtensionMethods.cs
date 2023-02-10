@@ -229,6 +229,12 @@ public static class DictionaryExtensionMethods
       if (val.HasValue) return val.ValueOrFailure();
       return orValue;
    }
+
+   public static void ActOnValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Action<TValue> action)
+   {
+      if (dict.TryGetValue(key, out var val))
+         action(val);
+   }
 }
 
 public class DictionaryResult<T>
