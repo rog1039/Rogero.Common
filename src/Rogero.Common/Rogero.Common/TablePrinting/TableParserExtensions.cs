@@ -131,7 +131,7 @@ public static class TableParserExtensions
                {
                   var val = value != null ? value.ToString() : "null";
 
-                  val                           = val.Replace("System.Collections.Generic.List`1", "List<>");
+                  val = val.Replace("System.Collections.Generic.List`1", "List<>");
                   if (val.StartsWith("List<>"))
                   {
                      var inner    = val.Substring(7, val.Length - 8);
@@ -204,7 +204,7 @@ public static class TableParserExtensions
    public static string ToStringTable<T>(this   IEnumerable<T>                values,
                                          params Expression<Func<T, object>>[] valueSelectors)
    {
-      var headers   = valueSelectors.Select(func => GetProperty(func).Name).ToArray();
+      var headers   = valueSelectors.Select(func => ExpressionHelpers.GetPropertyInfo(func).Name).ToArray();
       var selectors = valueSelectors.Select(exp => exp.Compile()).ToArray();
       return ToStringTable(values, headers, selectors);
    }
@@ -214,8 +214,11 @@ public static class TableParserExtensions
    {
       Console.WriteLine(values.ToStringTable(valueSelectors));
    }
+}
 
-   private static PropertyInfo GetProperty<T>(Expression<Func<T, object>> expression)
+public static class ExpressionHelpers
+{
+   public static PropertyInfo GetPropertyInfo<T>(Expression<Func<T, object>> expression)
    {
       if (expression.Body is UnaryExpression unaryExpression)
       {
@@ -233,5 +236,11 @@ public static class TableParserExtensions
       }
 
       throw new InvalidOperationException("Unable to extract PropertyInfo from expression.");
+   }
+   public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
+   {
+      var propertyInfo = GetPropertyInfo(expression);
+      var propertyname = propertyInfo.Name;
+      return propertyname;
    }
 }
