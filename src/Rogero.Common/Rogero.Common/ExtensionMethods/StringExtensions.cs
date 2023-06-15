@@ -241,4 +241,25 @@ public static class StringExtensions
       
       return lotFormatted;
     }
+
+    public static bool LessThan(this string s1, string s2)
+    {
+        var result = String.Compare(s1, s2, StringComparison.OrdinalIgnoreCase);
+        return result == -1;
+    }
+    public static bool LessThanOrEqual(this string s1, string s2)
+    {
+        var result = String.Compare(s1, s2, StringComparison.OrdinalIgnoreCase);
+        return result is -1 or 0;
+    }
+    public static bool GreaterThan(this string s1, string s2)
+    {
+        var result = String.Compare(s1, s2, StringComparison.OrdinalIgnoreCase);
+        return result == 1;
+    }
+    public static bool GreaterThanOrEqual(this string s1, string s2)
+    {
+        var result = String.Compare(s1, s2, StringComparison.OrdinalIgnoreCase);
+        return result is 1 or 0;
+    }
 }
