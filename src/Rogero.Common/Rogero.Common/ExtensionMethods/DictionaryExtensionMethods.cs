@@ -251,7 +251,7 @@ public class DictionaryResult<T>
    }
 
    public bool WasFound { get; }
-   public T    Value    { get; }
+   public T?   Value    { get; }
 
    public static DictionaryResult<T> Found(T value)
    {
