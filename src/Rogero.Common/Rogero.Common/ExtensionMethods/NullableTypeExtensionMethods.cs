@@ -171,14 +171,32 @@ public static class NullableTypeExtensionMethods
         if (isBuiltInNullable) return true;
 
         var nullableAttribute    = propertyInfo.GetAttributeSingleOrDefault("NullableAttribute");
-        var hasMagicNullableByte = DoesNullableAttributeHaveMagicNullableByte(nullableAttribute);
-
-        if (hasMagicNullableByte) return true;
+        if (nullableAttribute is not null)
+        {
+            var nullableAttributeFlag = GetNullableAttributeValue(nullableAttribute);
+            if (nullableAttributeFlag == 1) return false;
+            if (nullableAttributeFlag == 2) return true;
+        }
+        // var hasMagicNullableByte = DoesNullableAttributeHaveMagicNullableByte(nullableAttribute);
+        //
+        // if (hasMagicNullableByte) return true;
 
         var declaringTypeHasNullableContextAttribute = propertyInfo
             .DeclaringType
             .GetAttributeSingleOrDefault("NullableContextAttribute");
         if (declaringTypeHasNullableContextAttribute is null) throw new NotImplementedException();
+
+        if (declaringTypeHasNullableContextAttribute is not null)
+        {
+            var nullableContextAttributeFlag =
+                GetNullableContextAttributeValue(declaringTypeHasNullableContextAttribute);
+            if (nullableContextAttributeFlag == 1) return false;
+            if (nullableContextAttributeFlag == 2) return true;
+        }
+        //
+        // var flagField = declaringTypeHasNullableContextAttribute.GetType().GetField("Flag");
+        // var flagValue = (byte)flagField.GetValue(declaringTypeHasNullableContextAttribute);
+        // if (flagValue == 2) return true;
 
         return false;
     }
@@ -260,7 +278,7 @@ public static class NullableTypeExtensionMethods
     /// </summary>
     /// <param name="nullableAttribute"></param>
     /// <returns></returns>
-    private static int GetNullableAttributeValue(object nullableAttribute)
+    public static int GetNullableAttributeValue(object nullableAttribute)
     {
         var nullableByteValue = nullableAttribute
             .ObjNullMap(attribute => attribute.GetType().GetField("NullableFlags", BindingFlags))
