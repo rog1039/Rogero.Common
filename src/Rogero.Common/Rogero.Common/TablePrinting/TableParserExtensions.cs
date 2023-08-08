@@ -218,7 +218,7 @@ public static class TableParserExtensions
 
 public static class ExpressionHelpers
 {
-   public static PropertyInfo GetPropertyInfo<T>(Expression<Func<T, object>> expression)
+   public static PropertyInfo GetPropertyInfo<T>(this Expression<Func<T, object>> expression)
    {
       if (expression.Body is UnaryExpression unaryExpression)
       {
@@ -237,7 +237,7 @@ public static class ExpressionHelpers
 
       throw new InvalidOperationException("Unable to extract PropertyInfo from expression.");
    }
-   public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
+   public static string GetPropertyName<T>(this Expression<Func<T, object>> expression)
    {
       var propertyInfo = GetPropertyInfo(expression);
       var propertyname = propertyInfo.Name;
