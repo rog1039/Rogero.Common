@@ -61,7 +61,7 @@ public class DoOnce
     /// <summary>
     ///     Resets this object as if the action has never been performed.
     /// </summary>
-    private void Reset()
+    public void Reset()
     {
         Interlocked.Exchange(ref _isDone, 0);
     }
