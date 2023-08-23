@@ -120,7 +120,7 @@ public static class StringExtensions
 
    public static string StringJoin(this IEnumerable<string> list, string separator)
    {
-      return string.Join(separator, list);
+      return string.Join(separator, list.Where(x => x.IsNotNullOrWhitespace()));
    }
 
    private static string SeparatorCommaNewLine = ", " + Environment.NewLine;
