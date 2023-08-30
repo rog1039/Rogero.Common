@@ -85,7 +85,7 @@ public static class ListExtensionMethods
     //     }
     // }
 
-    public static void Remove<T>(this IList<T> list, Predicate<T> predicate)
+    private static void Remove<T>(this IList<T> list, Predicate<T> predicate)
     {
         for (int i = list.Count - 1; i >= 0; i--)
         {
