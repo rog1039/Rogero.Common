@@ -7,16 +7,22 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class TableParserExtensions
 {
-   public static void PrintStringTable<T>(this IEnumerable<T> values,
-                                          string              tableTitle  = null,
-                                          int                 sampleCount = Int32.MaxValue)
+   public static void PrintStringTable<T>(this IEnumerable<T>                values,
+                                          string                             tableTitle     = null,
+                                          int                                sampleCount    = Int32.MaxValue,
+                                          IList<Expression<Func<T, object>>> includeColumns = null,
+                                          IList<Expression<Func<T, object>>> excludeColumns = null
+   )
    {
-      Console.WriteLine(ToStringTable(values, tableTitle, sampleCount));
+      Console.WriteLine(ToStringTable(values, tableTitle, sampleCount, includeColumns, excludeColumns));
    }
 
-   public static string ToStringTable<T>(this IEnumerable<T> values,
-                                         string              tableTitle  = null,
-                                         int                 sampleCount = Int32.MaxValue)
+   public static string ToStringTable<T>(this IEnumerable<T>                values,
+                                         string                             tableTitle     = null,
+                                         int                                sampleCount    = Int32.MaxValue,
+                                         IList<Expression<Func<T, object>>> includeColumns = null,
+                                         IList<Expression<Func<T, object>>> excludeColumns = null
+   )
    {
       var sb = new StringBuilder();
       if (tableTitle.IsNotNullOrWhitespace())
@@ -30,16 +36,20 @@ public static class TableParserExtensions
          sb.AppendLine(tableHeader + sampleSection);
       }
 
-      sb.AppendLine(values.Take(sampleCount).ToStringTable(useTForProperties: false));
+      sb.AppendLine(values.Take(sampleCount).ToStringTable(useTForProperties: false, includeColumns, excludeColumns));
 
       return sb.ToString();
    }
 
-   public static string ToStringTable<T>(this IEnumerable<T> values, bool useTForProperties = false)
+   public static string ToStringTable<T>(this IEnumerable<T>                values,
+                                         bool                               useTForProperties = false,
+                                         IList<Expression<Func<T, object>>> includeColumns    = null,
+                                         IList<Expression<Func<T, object>>> excludeColumns    = null
+   )
    {
       if (values == null || !values.Any()) return String.Empty;
 
-      var objectProperties = GetObjectProperties<T>(values, useTForProperties);
+      var objectProperties = GetObjectProperties<T>(values, useTForProperties, includeColumns, excludeColumns);
       var columnHeaders    = new string[objectProperties.Length];
       var valueSelectors   = new Func<T, object>[objectProperties.Length];
 
@@ -56,19 +66,47 @@ public static class TableParserExtensions
       return ToStringTable(values, columnHeaders, valueSelectors);
    }
 
-   private static PropertyInfo[] GetObjectProperties<T>(IEnumerable<T> values, bool useTForProperties)
+   private static PropertyInfo[] GetObjectProperties<T>(IEnumerable<T>                     values,
+                                                        bool                               useTForProperties,
+                                                        IList<Expression<Func<T, object>>> includeColumns = null,
+                                                        IList<Expression<Func<T, object>>> excludeColumns = null
+   )
    {
+      if (includeColumns is not null && excludeColumns is not null)
+         throw new InvalidOperationException(
+            $@"
+Cannot have both include and exclude columns. Only send one or the other.
+Include columns: {includeColumns.Select(x => x.GetPropertyName()).StringJoin(", ")}
+Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", ")}");
+
       //Can't use the code below since it may very well be that T is object and the list contains subtypes of object
       //We must use it though if the values array has no elements.
       if (!values.Any() || useTForProperties)
       {
          var objectProperties = typeof(T).GetProperties();
-         return objectProperties;
+         return FilterProperties(objectProperties);
       }
 
       //So instead, let's check the type of the first element
       var type = values.First().GetType();
-      return GetBasePropertiesFirst(type);
+      return FilterProperties(GetBasePropertiesFirst(type));
+
+      PropertyInfo[] FilterProperties(PropertyInfo[] propertyInfos)
+      {
+         if (includeColumns is not null)
+         {
+            var includeNames = includeColumns.Select(x => x.GetPropertyName()).ToList();
+            return propertyInfos.Where(x => includeNames.Contains(x.Name)).ToArray();
+         }
+
+         if (excludeColumns is not null)
+         {
+            var excludeNames = excludeColumns.Select(x => x.GetPropertyName()).ToList();
+            return propertyInfos.Where(x => !excludeNames.Contains(x.Name)).ToArray();
+         }
+
+         return propertyInfos;
+      }
    }
 
    // this is alternative for typeof(T).GetProperties()
@@ -138,7 +176,7 @@ public static class TableParserExtensions
                      var typeName = inner.SplitOn('.').Last();
                      val = $"List<{typeName}>";
                   }
-                  
+
                   arrValues[rowIndex, colIndex] = val;
                   break;
                }
@@ -237,6 +275,7 @@ public static class ExpressionHelpers
 
       throw new InvalidOperationException("Unable to extract PropertyInfo from expression.");
    }
+
    public static string GetPropertyName<T>(this Expression<Func<T, object>> expression)
    {
       var propertyInfo = GetPropertyInfo(expression);

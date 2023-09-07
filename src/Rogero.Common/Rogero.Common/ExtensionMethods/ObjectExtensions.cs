@@ -50,6 +50,12 @@ public static class ObjectExtensions
     }
         
 #nullable enable
+    /// <summary>
+    /// Runs the specified action if the object is not null.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="some"></param>
+    /// <typeparam name="T"></typeparam>
     public static void ObjNullMatch<T>(this T obj, Action<T> some)
     {
         if (obj is not null)
@@ -57,6 +63,13 @@ public static class ObjectExtensions
             some(obj!);
         }
     }
+    /// <summary>
+    /// Runs the specified Some() or None() methods if the object is not null or null.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="some"></param>
+    /// <param name="none"></param>
+    /// <typeparam name="T"></typeparam>
     public static void ObjNullMatch<T>(this T obj, Action<T> some, Action none)
     {
         if (obj is not null)
