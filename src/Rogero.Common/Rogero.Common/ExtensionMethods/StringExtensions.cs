@@ -174,7 +174,7 @@ public static class StringExtensions
       return sb.ToString();
    }
 
-   public static string IfNullOrWhitespaceThen(this string s, string fallbackValue)
+   public static string IfNullOrWhitespaceThen(this string? s, string fallbackValue)
    {
       return s.IsNullOrWhitespace()
          ? fallbackValue

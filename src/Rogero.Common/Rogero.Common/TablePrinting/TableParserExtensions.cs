@@ -10,8 +10,8 @@ public static class TableParserExtensions
    public static void PrintStringTable<T>(this IEnumerable<T>                values,
                                           string                             tableTitle     = null,
                                           int                                sampleCount    = Int32.MaxValue,
-                                          IList<Expression<Func<T, object>>> includeColumns = null,
-                                          IList<Expression<Func<T, object>>> excludeColumns = null
+                                          List<Expression<Func<T, object>>> includeColumns = null,
+                                          List<Expression<Func<T, object>>> excludeColumns = null
    )
    {
       Console.WriteLine(ToStringTable(values, tableTitle, sampleCount, includeColumns, excludeColumns));
