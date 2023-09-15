@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -7,9 +8,9 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class TableParserExtensions
 {
-   public static void PrintStringTable<T>(this IEnumerable<T>                values,
-                                          string                             tableTitle     = null,
-                                          int                                sampleCount    = Int32.MaxValue,
+   public static void PrintStringTable<T>(this IEnumerable<T>               values,
+                                          string                            tableTitle     = null,
+                                          int                               sampleCount    = Int32.MaxValue,
                                           List<Expression<Func<T, object>>> includeColumns = null,
                                           List<Expression<Func<T, object>>> excludeColumns = null
    )
@@ -174,7 +175,15 @@ Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", 
                   {
                      var inner    = val.Substring(7, val.Length - 8);
                      var typeName = inner.SplitOn('.').Last();
-                     val = $"List<{typeName}>";
+
+                     if (value is ICollection coll)
+                     {
+                        val = $"List<{typeName}> ({coll.Count} items)";
+                     }
+                     else
+                     {
+                        val = $"List<{typeName}> ()";
+                     }
                   }
 
                   arrValues[rowIndex, colIndex] = val;
