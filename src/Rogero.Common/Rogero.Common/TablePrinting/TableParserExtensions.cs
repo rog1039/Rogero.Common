@@ -49,6 +49,10 @@ public static class TableParserExtensions
    )
    {
       if (values == null || !values.Any()) return String.Empty;
+      if (typeof(T) == typeof(string))
+      {
+         return string.Join(Environment.NewLine, values);
+      }
 
       var objectProperties = GetObjectProperties<T>(values, useTForProperties, includeColumns, excludeColumns);
       var columnHeaders    = new string[objectProperties.Length];
