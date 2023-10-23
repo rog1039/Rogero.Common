@@ -78,6 +78,18 @@ public static class StringExtensions
       return result;
    }
 
+   public static string RemoveLineBreaks(this string s, string lineBreakReplace = "/")
+   {
+      if(s.IsNullOrWhitespace())return String.Empty;
+      
+      var result = s.Replace("\r\n", lineBreakReplace);
+      result = result.Replace("\r", lineBreakReplace);
+      result = result.Replace("\n", lineBreakReplace);
+      result = result.Replace("\t", lineBreakReplace);
+
+      return result;
+   }
+
    public static string RemoveLeft(this string s, int numberOfCharacters)
    {
       if (numberOfCharacters > s.Length)
