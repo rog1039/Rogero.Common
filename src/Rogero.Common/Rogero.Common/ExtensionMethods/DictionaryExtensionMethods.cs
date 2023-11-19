@@ -230,7 +230,7 @@ public static class DictionaryExtensionMethods
       return orValue;
    }
 
-   public static void ActOnValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Action<TValue> action)
+   public static void MatchSome<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Action<TValue> action)
    {
       if (dict.TryGetValue(key, out var val))
          action(val);
