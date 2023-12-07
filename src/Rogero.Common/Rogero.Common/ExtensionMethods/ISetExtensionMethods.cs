@@ -10,6 +10,13 @@ public static class SetExtensionMethods
         }
     }
 
+    /// <summary>
+    /// Does not modify either set. Returns a new HashSet with the result.
+    /// </summary>
+    /// <param name="set"></param>
+    /// <param name="itemsToRemove"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static ISet<T> Subtract<T>(this ISet<T> set, IEnumerable<T> itemsToRemove)
     {
         var newSet = set.MyToHashSet();
