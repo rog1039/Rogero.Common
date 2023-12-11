@@ -269,6 +269,25 @@ Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", 
 
 public static class ExpressionHelpers
 {
+   public static PropertyInfo GetPropertyInfo<T,TProp>(this Expression<Func<T, TProp>> expression)
+   {
+      if (expression.Body is UnaryExpression unaryExpression)
+      {
+         if (unaryExpression.Operand is MemberExpression memberExpression)
+         {
+            return memberExpression.Member as PropertyInfo ??
+                   throw new InvalidOperationException("Unable to extract PropertyInfo from MemberExpression.");
+         }
+      }
+
+      if ((expression.Body is MemberExpression body))
+      {
+         return body.Member as PropertyInfo ??
+                throw new InvalidOperationException("Unable to extract PropertyInfo from MemberExpression");
+      }
+
+      throw new InvalidOperationException("Unable to extract PropertyInfo from expression.");
+   }
    public static PropertyInfo GetPropertyInfo<T>(this Expression<Func<T, object>> expression)
    {
       if (expression.Body is UnaryExpression unaryExpression)
@@ -289,6 +308,13 @@ public static class ExpressionHelpers
       throw new InvalidOperationException("Unable to extract PropertyInfo from expression.");
    }
 
+   public static string GetPropertyName<T,TProp>(this Expression<Func<T, TProp>> expression)
+   {
+      var propertyInfo = GetPropertyInfo(expression);
+      var propertyname = propertyInfo.Name;
+      return propertyname;
+   }
+   
    public static string GetPropertyName<T>(this Expression<Func<T, object>> expression)
    {
       var propertyInfo = GetPropertyInfo(expression);
