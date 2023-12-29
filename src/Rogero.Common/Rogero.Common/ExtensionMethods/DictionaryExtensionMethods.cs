@@ -1,4 +1,5 @@
-﻿using Optional.Collections;
+﻿using Optional;
+using Optional.Collections;
 using Optional.Unsafe;
 
 namespace Rogero.Common.ExtensionMethods;
@@ -43,7 +44,7 @@ public static class DictionaryExtensionMethods
          }
          else
          {
-            subdict = new Dictionary<K2, IList<T>>() {{k2, item.MakeList()}};
+            subdict = new Dictionary<K2, IList<T>>() { { k2, item.MakeList() } };
             mainDict.Add(k1, subdict);
          }
       }
@@ -66,7 +67,7 @@ public static class DictionaryExtensionMethods
       }
       else
       {
-         subdict = new Dictionary<K2, IList<T>>() {{k2, item.MakeList()}};
+         subdict = new Dictionary<K2, IList<T>>() { { k2, item.MakeList() } };
          dict.Add(k1, subdict);
       }
    }
@@ -185,9 +186,10 @@ public static class DictionaryExtensionMethods
 
    public static void AddToDictionary<K, V>(this IDictionary<K, IList<V>> dict, K key, V newValue)
    {
-      var existingListOption = dict.GetValueOrNone(key);
-      existingListOption.Match(existingList => existingList.Add(newValue),
-         () => dict.Add(key, new List<V>() {newValue}));
+      dict
+         .GetValueOrNone(key)
+         .Match(existingList => existingList.Add(newValue),
+                () => dict.Add(key, new List<V>() { newValue }));
    }
 
    public static void AddRange<K, V>(this IDictionary<K, IList<V>> dict, IList<V> values, Func<V, K> keyFunc)
@@ -217,13 +219,20 @@ public static class DictionaryExtensionMethods
       return DictionaryResult<TValue>.NotFound();
    }
 
-   public static TValue? GetValueOr<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue? orValue) where TValue : struct
+   public static TValue? GetValueOr<TKey, TValue>(this IDictionary<TKey, TValue> dict,
+                                                  TKey                           key,
+                                                  TValue?                        orValue)
+      where TValue : struct
    {
       var val = dict.GetValueOrNone(key);
       if (val.HasValue) return val.ValueOrFailure();
       return orValue;
    }
-   public static TValue? GetValueOr<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue? orValue) where TValue : class
+
+   public static TValue? GetValueOr<TKey, TValue>(this IDictionary<TKey, TValue> dict,
+                                                  TKey                           key,
+                                                  TValue?                        orValue)
+      where TValue : class
    {
       var val = dict.GetValueOrNone(key);
       if (val.HasValue) return val.ValueOrFailure();
