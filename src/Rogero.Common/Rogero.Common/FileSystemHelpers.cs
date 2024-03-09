@@ -5,7 +5,8 @@ namespace Rogero.Common;
 
 public static class FileSystemHelpers
 {
-   public static Option<FileInfo> FindFileUpwards(string fileName, int upwardIterationLimit,
+   public static Option<FileInfo> FindFileUpwards(string fileName, 
+                                                  int upwardIterationLimit,
                                                   string startingDirectory = null)
    {
       startingDirectory ??= Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
@@ -13,6 +14,8 @@ public static class FileSystemHelpers
       // var startingDirectory     = Path.GetDirectoryName(executingAssemblyPath);
       return FindFileUpwards(startingDirectory, fileName, upwardIterationLimit);
    }
+
+   public static string GetCallingAssemblyPath() => Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
 
    public static Option<FileInfo> FindFileUpwards(string startingDirectory, string fileName, int upwardIterationLimit)
    {
@@ -31,6 +34,7 @@ public static class FileSystemHelpers
          directory = directory.Parent;
       }
 
+      Console.WriteLine($"File not found, Highest Dir: {directory.FullName}, Start: {startingDirectory}");
       return Option.None<FileInfo>();
    }
 
