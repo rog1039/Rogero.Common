@@ -20,6 +20,7 @@ public static class FileSystemHelpers
    public static Option<FileInfo> FindFileUpwards(string startingDirectory, string fileName, int upwardIterationLimit)
    {
       var directory = new DirectoryInfo(startingDirectory);
+      if(!directory.Exists) return Option.None<FileInfo>();
 
       for (int i = -1; i < upwardIterationLimit; i++)
       {
