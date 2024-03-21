@@ -8,6 +8,19 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class DictionaryExtensionMethods
 {
+   public static Dictionary<TKey, T> ToDictionaryFirst<TKey, T>(this IEnumerable<T> items, Func<T, TKey> keyFunc)
+   {
+      var dict = new Dictionary<TKey, T>();
+      foreach (var item in items)
+      {
+         var key = keyFunc(item);
+         if (dict.ContainsKey(key)) continue;
+         dict.Add(key, item);
+      }
+
+      return dict;
+   }
+   
    public static Dictionary<K, IList<T>> ToDictionaryMany<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc)
    {
       var dict = new Dictionary<K, IList<T>>();
