@@ -1,4 +1,4 @@
-﻿using Optional;
+﻿using System.Collections;
 using Optional.Collections;
 using Optional.Unsafe;
 
@@ -154,7 +154,11 @@ public static class DictionaryExtensionMethods
 
    public static Dictionary<K, T> ToDictionaryIgnoreDuplicates<T, K>(this IEnumerable<T> list, Func<T, K> keyFunc)
    {
-      var dict = new Dictionary<K, T>();
+      Dictionary<K, T> dict;
+      dict = list is ICollection coll 
+         ? new(coll.Count)
+         : new();
+      
       foreach (var item in list)
       {
          var key = keyFunc(item);
