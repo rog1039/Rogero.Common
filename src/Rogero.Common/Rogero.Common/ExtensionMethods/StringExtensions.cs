@@ -30,7 +30,7 @@ public static class StringExtensions
         return "{" + input + "}";
     }
 
-    public static string Parenthesize(this string input)
+    public static string Parenthesize(this string? input)
     {
         return "(" + input + ")";
     }
@@ -97,7 +97,7 @@ public static class StringExtensions
         return s.Substring(numberOfCharacters, s.Length - numberOfCharacters);
     }
 
-    public static void ToConsoleWriteLine(this string s, string title = null)
+    public static void ToConsoleWriteLine(this string? s, string title = null)
     {
         if (title.IsNotNullOrWhitespace()) Console.WriteLine(title);
         Console.WriteLine(s);
@@ -130,14 +130,14 @@ public static class StringExtensions
         return s.Substring(s.Length - charCount, charCount);
     }
 
-    public static string StringJoin(this IEnumerable<string> list, string separator)
+    public static string? StringJoin(this IEnumerable<string?> list, string separator)
     {
         return string.Join(separator, list.Where(x => x.IsNotNullOrWhitespace()));
     }
 
     private static string SeparatorCommaNewLine = ", " + Environment.NewLine;
 
-    public static string StringJoinCommaNewLine(this IEnumerable<string> list)
+    public static string? StringJoinCommaNewLine(this IEnumerable<string> list)
     {
         return string.Join(SeparatorCommaNewLine, list);
     }
@@ -149,7 +149,7 @@ public static class StringExtensions
             .Replace("\"", "\\\""); //escape quotations;
     }
 
-    public static string SmartCombine(this string separator, params string[] pieces)
+    public static string? SmartCombine(this string separator, params string?[] pieces)
     {
         var isFirst = true;
         var sb = new StringBuilder();

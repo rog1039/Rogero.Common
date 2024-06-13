@@ -52,4 +52,16 @@ public static class SetExtensionMethods
 
         return resultSet;
     }
+    public static SortedSet<T> IntersectSet<T>(this SortedSet<T> set, SortedSet<T> secondSet)
+    {
+        var resultSet = new SortedSet<T>();
+            
+        foreach (var item in set)
+        {
+            if (secondSet.Contains(item))
+                resultSet.Add(item);
+        }
+
+        return resultSet;
+    }
 }
