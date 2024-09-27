@@ -261,6 +261,18 @@ public static class DictionaryExtensionMethods
       if (dict.TryGetValue(key, out var val))
          action(val);
    }
+
+   public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TValue> valueFunc)
+   {
+      if (dict.TryGetValue(key, out var val))
+      {
+         return val;
+      }
+
+      var newVal = valueFunc();
+      dict.Add(key, newVal);
+      return newVal;
+   }
 }
 
 public class DictionaryResult<T>
