@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using Reactive.Bindings;
+using ReactiveUI;
 using Rogero.Common.ExtensionMethods;
 
 
 namespace Rogero.Common.Selections;
 
+[Obsolete]
 public class GenericSelector<T>
 {
     public ReactiveProperty<T>     SelectedItem { get; } = new ReactiveProperty<T>(default(T));

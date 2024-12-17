@@ -10,5 +10,6 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
     <PackageReference Include="Optional" Version="4.0.0" />
     <PackageReference Include="ReactiveProperty" Version="8.2.0" />
+    <PackageReference Include="ReactiveUI" Version="20.1.63" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Reactive.Bindings;
+using ReactiveUI;
 
 namespace Rogero.Common.Selections;
 

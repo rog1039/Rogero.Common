@@ -15,8 +15,7 @@ public static class ObjectTextSearcherExtensionMethods
 
 public class ObjectTextSearcher
 {
-    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyInfoMap =
-        new ConcurrentDictionary<Type, PropertyInfo[]>();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyInfoMap = new();
 
     public static IEnumerable<T> FindMatches<T>(IEnumerable<T> items, string searchText)
     {
