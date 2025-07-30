@@ -8,6 +8,15 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class TableParserExtensions
 {
+   /// <summary>
+   /// CAUTION: will execute the provided enumerable more than once! Be careful of side effects.
+   /// </summary>
+   /// <param name="values"></param>
+   /// <param name="tableTitle"></param>
+   /// <param name="sampleCount"></param>
+   /// <param name="includeColumns"></param>
+   /// <param name="excludeColumns"></param>
+   /// <typeparam name="T"></typeparam>
    public static void PrintStringTable<T>(this IEnumerable<T>               values,
                                           string                            tableTitle     = null,
                                           int                               sampleCount    = Int32.MaxValue,
@@ -55,6 +64,10 @@ public static class TableParserExtensions
       }
 
       var objectProperties = GetObjectProperties<T>(values, useTForProperties, includeColumns, excludeColumns);
+      if (objectProperties.Length == 0)
+      {
+         throw new Exception("No properties found to print. Usually means we attempted a stringtable on a primitive type like int or string.");
+      }
       var columnHeaders    = new string[objectProperties.Length];
       var valueSelectors   = new Func<T, object>[objectProperties.Length];
 
@@ -125,6 +138,8 @@ Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", 
          orderList.Insert(0, iteratingType);
          iteratingType = iteratingType.BaseType;
       } while (iteratingType != null);
+
+      var prop2 = type.GetProperties();
 
       var props = type.GetProperties()
          .Where(prop => prop.CanRead)

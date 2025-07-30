@@ -97,6 +97,20 @@ public static class EnumerableExtensionMethods
         }
     }
 
+    /// <summary>
+    /// An eager ForEach on an IEnumerable.
+    /// </summary>
+    /// <param name="items"></param>
+    /// <param name="action"></param>
+    /// <typeparam name="T"></typeparam>
+    public static async Task MyForEachAsync<T>(this IEnumerable<T> items, Func<T,Task> action)
+    {
+        foreach (var item in items)
+        {
+            await action(item);
+        }
+    }
+
     public static IEnumerable<T> Distinct<T,TKey>(this IEnumerable<T> items, Func<T,TKey> selector)
     {
         HashSet<TKey> uniqueItems = new();
