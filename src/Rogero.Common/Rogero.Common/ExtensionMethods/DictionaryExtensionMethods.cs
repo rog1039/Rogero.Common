@@ -8,6 +8,63 @@ namespace Rogero.Common.ExtensionMethods;
 
 public static class DictionaryExtensionMethods
 {
+   /// <summary>
+   /// Returns a list of key-value pairs from the first dictionary that are not present in the second dictionary.
+   /// </summary>
+   /// <param name="dict">The source dictionary to evaluate.</param>
+   /// <param name="other">The dictionary to compare against to find differences.</param>
+   /// <typeparam name="TKey">The type of the keys in both dictionaries.</typeparam>
+   /// <typeparam name="TValue">The type of the values in both dictionaries.</typeparam>
+   /// <returns>A list of key-value pairs that exist in the source dictionary but not in the compared dictionary.</returns>
+   /// <exception cref="ArgumentNullException">Thrown if either <paramref name="dict"/> or <paramref name="other"/> is null.</exception>
+   public static List<KeyValuePair<TKey, TValue>> DictionaryExcept<TKey, TValue>(
+      this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other)
+   {
+      if (dict == null) throw new ArgumentNullException(nameof(dict));
+      if (other == null) throw new ArgumentNullException(nameof(other));
+
+      var result = new List<KeyValuePair<TKey, TValue>>();
+
+      foreach (var kvp in dict)
+      {
+         if (!other.ContainsKey(kvp.Key))
+         {
+            result.Add(kvp);
+         }
+      }
+
+      return result; 
+   }
+
+   /// <summary>
+   /// Returns a list of key-value pairs that exist in both dictionaries based on their keys. KVP's returned are from
+   /// the first dictionary not the second.
+   /// </summary>
+   /// <param name="dict">The source dictionary to evaluate.</param>
+   /// <param name="other">The dictionary to compare against to find intersections.</param>
+   /// <typeparam name="TKey">The type of the keys in both dictionaries.</typeparam>
+   /// <typeparam name="TValue">The type of the values in both dictionaries.</typeparam>
+   /// <returns>A list of key-value pairs that exist in both dictionaries--from the first dictionary.</returns>
+   /// <exception cref="ArgumentNullException">Thrown if either <paramref name="dict"/> or <paramref name="other"/> is null.</exception>
+   public static List<KeyValuePair<TKey, TValue>> DictionaryIntersect<TKey, TValue>(
+      this IDictionary<TKey, TValue> dict,
+      IDictionary<TKey, TValue>      other)
+   {
+      if (dict == null) throw new ArgumentNullException(nameof(dict));
+      if (other == null) throw new ArgumentNullException(nameof(other));
+
+      var result = new List<KeyValuePair<TKey, TValue>>();
+
+      foreach (var kvp in dict)
+      {
+         if (other.ContainsKey(kvp.Key))
+         {
+            result.Add(kvp);
+         }
+      }
+
+      return result;
+   }
    public static Dictionary<TKey, T> ToDictionaryFirst<TKey, T>(this IEnumerable<T> items, Func<T, TKey> keyFunc)
    {
       var dict = new Dictionary<TKey, T>();
