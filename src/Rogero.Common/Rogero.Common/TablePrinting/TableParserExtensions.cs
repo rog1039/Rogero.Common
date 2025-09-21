@@ -185,6 +185,11 @@ Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", 
                   arrValues[rowIndex, colIndex] = dec.ToString("#,#0.#####");
                   break;
                }
+               case int integer:
+               {
+                  arrValues[rowIndex, colIndex] = integer.ToString("#,#0");
+                  break;
+               }
                default:
                {
                   var val = value != null ? value.ToString() : "null";
