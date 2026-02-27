@@ -241,7 +241,8 @@ public static class StringExtensions
 
   public static string[] SplitOn(this string text, params char[] splitChar)
   {
-    return text.Split(splitChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    var removeEmptyEntries = StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries;
+    return text.Split(splitChar, removeEmptyEntries);
   }
 
   /// <summary>

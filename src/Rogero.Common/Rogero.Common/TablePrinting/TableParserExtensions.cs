@@ -37,7 +37,7 @@ public static class TableParserExtensions
       var sb = new StringBuilder();
       if (tableTitle.IsNotNullOrWhitespace())
       {
-         sb.AppendLine(new string('=', 350));
+         sb.AppendLine(new string('═', 350));
          var datasourceRowCount = values.Count();
          var tableHeader        = $"{tableTitle} |";
          var sampleSection = datasourceRowCount > sampleCount
@@ -223,7 +223,7 @@ Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", 
    public static string ToStringTable(this string[,] arrValues)
    {
       int[] maxColumnsWidth = GetMaxColumnsWidth(arrValues);
-      var   headerSpliter   = new string('-', maxColumnsWidth.Sum(i => i + 3) - 1);
+      var   headerSpliter   = new string('─', maxColumnsWidth.Sum(i => i + 3)-1);
 
       var sb = new StringBuilder();
       for (int rowIndex = 0; rowIndex < arrValues.GetLength(0); rowIndex++)
@@ -233,18 +233,18 @@ Exclude columns: {excludeColumns.Select(x => x.GetPropertyName()).StringJoin(", 
             // Print cell
             string cell = arrValues[rowIndex, colIndex];
             cell = cell.PadRight(maxColumnsWidth[colIndex]);
-            sb.Append(" | ");
+            sb.Append(" │ ");
             sb.Append(cell);
          }
 
          // Print end of line
-         sb.Append(" | ");
+         sb.Append(" │ ");
          sb.AppendLine();
 
          // Print splitter
          if (rowIndex == 0)
          {
-            sb.AppendFormat(" |{0}| ", headerSpliter);
+            sb.AppendFormat(" │{0}│ ", headerSpliter);
             sb.AppendLine();
          }
       }
